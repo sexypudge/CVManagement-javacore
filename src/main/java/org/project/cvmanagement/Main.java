@@ -34,5 +34,13 @@ public class Main {
         // 2. show menu
         // 3. read input
         // 4. call service
+
+
+
+        // thanhnv-release (nhánh release chính Thành)
+        // thanhnv-dev (nhánh phát triển của Thành sẽ tách từ nhánh thanhnv-release)
+        // Thành hoàn thành feature add-candidate và muốn release
+        // Thành sẽ tạo Pull Request để merge vào nhánh thanhnv-release
+        // Thành sau đó sẽ đợi approve của LuongNV
     }
 }

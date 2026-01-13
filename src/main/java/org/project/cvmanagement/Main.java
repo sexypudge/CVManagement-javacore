@@ -26,9 +26,29 @@ public class Main {
                 2,
                 null
         );
+        Candidate candidate1 = new Candidate(
+                "C002",
+                "Nguyen Van A1",
+                "asdasd",
+                2,
+                null
+        );
+
+        Candidate candidate2 = new Candidate(
+                "C003",
+                "Nguyen Van AB",
+                "asdasd",
+                2,
+                null
+        );
+
 
         candidateService.addCandidate(candidate);
-        System.out.println("Candidate created successfully");
+
+        candidateService.addCandidate(candidate1);
+
+
+        candidateService.addCandidate(candidate2);
 
 
 

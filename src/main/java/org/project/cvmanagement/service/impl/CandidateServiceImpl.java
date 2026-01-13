@@ -1,13 +1,13 @@
-package org.project.cvmanagement.service.impl;
+package main.java.org.project.cvmanagement.service.impl;
 
-import org.project.cvmanagement.common.CommonConstant;
-import org.project.cvmanagement.domain.Candidate;
-import org.project.cvmanagement.enums.CandidateStatus;
-import org.project.cvmanagement.exception.BusinessException;
-import org.project.cvmanagement.exception.DuplicateCandidateException;
-import org.project.cvmanagement.repository.CandidateRepository;
-import org.project.cvmanagement.service.CandidateService;
-import org.project.cvmanagement.util.CommonUtil;
+import main.java.org.project.cvmanagement.common.CommonConstant;
+import main.java.org.project.cvmanagement.domain.Candidate;
+import main.java.org.project.cvmanagement.exception.BusinessException;
+import main.java.org.project.cvmanagement.exception.DuplicateCandidateException;
+import main.java.org.project.cvmanagement.repository.CandidateRepository;
+import main.java.org.project.cvmanagement.service.CandidateService;
+import main.java.org.project.cvmanagement.enums.CandidateStatus;
+import main.java.org.project.cvmanagement.util.CommonUtil;
 
 import java.util.List;
 

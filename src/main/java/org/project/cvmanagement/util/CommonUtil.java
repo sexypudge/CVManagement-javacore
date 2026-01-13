@@ -1,4 +1,4 @@
-package org.project.cvmanagement.util;
+package main.java.org.project.cvmanagement.util;
 
 public final class CommonUtil {
     public static boolean isBlank(String value) {

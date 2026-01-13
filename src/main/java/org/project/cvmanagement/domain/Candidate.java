@@ -1,6 +1,6 @@
-package org.project.cvmanagement.domain;
+package main.java.org.project.cvmanagement.domain;
 
-import org.project.cvmanagement.enums.CandidateStatus;
+import main.java.org.project.cvmanagement.enums.CandidateStatus;
 
 public class Candidate {
     // TODO: fields

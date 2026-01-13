@@ -1,6 +1,6 @@
-package org.project.cvmanagement.service.impl;
+package main.java.org.project.cvmanagement.service.impl;
 
-import org.project.cvmanagement.service.SubmissionService;
+import main.java.org.project.cvmanagement.service.SubmissionService;
 
 public class SubmissionServiceImpl implements SubmissionService {
 

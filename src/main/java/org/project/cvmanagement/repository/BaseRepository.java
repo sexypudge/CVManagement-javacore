@@ -1,4 +1,4 @@
-package org.project.cvmanagement.repository;
+package main.java.org.project.cvmanagement.repository;
 
 
 import java.util.List;

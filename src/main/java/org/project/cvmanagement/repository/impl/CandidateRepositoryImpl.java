@@ -1,7 +1,7 @@
-package org.project.cvmanagement.repository.impl;
+package main.java.org.project.cvmanagement.repository.impl;
 
-import org.project.cvmanagement.domain.Candidate;
-import org.project.cvmanagement.repository.CandidateRepository;
+import main.java.org.project.cvmanagement.domain.Candidate;
+import main.java.org.project.cvmanagement.repository.CandidateRepository;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.project.cvmanagement.service;
+package main.java.org.project.cvmanagement.service;
 
 
 public interface SubmissionService {

@@ -1,6 +1,6 @@
-package org.project.cvmanagement.service;
+package main.java.org.project.cvmanagement.service;
 
-import org.project.cvmanagement.domain.Job;
+import main.java.org.project.cvmanagement.domain.Job;
 
 
 public interface JobService {

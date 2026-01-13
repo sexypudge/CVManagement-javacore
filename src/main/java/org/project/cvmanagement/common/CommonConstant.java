@@ -1,4 +1,4 @@
-package org.project.cvmanagement.common;
+package main.java.org.project.cvmanagement.common;
 
 public final class CommonConstant {
     public static String REQUIRED_CANDIDATE_ERROR_MESSAGE = "Candidate id is required";

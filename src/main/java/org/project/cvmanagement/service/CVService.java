@@ -1,7 +1,7 @@
-package org.project.cvmanagement.service;
+package main.java.org.project.cvmanagement.service;
 
 
-import org.project.cvmanagement.domain.CV;
+import main.java.org.project.cvmanagement.domain.CV;
 
 public interface CVService {
 

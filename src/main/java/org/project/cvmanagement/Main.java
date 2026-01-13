@@ -1,10 +1,10 @@
-package org.project.cvmanagement;
+package main.java.org.project.cvmanagement;
 
-import org.project.cvmanagement.domain.Candidate;
-import org.project.cvmanagement.repository.CandidateRepository;
-import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
-import org.project.cvmanagement.service.CandidateService;
-import org.project.cvmanagement.service.impl.CandidateServiceImpl;
+import main.java.org.project.cvmanagement.domain.Candidate;
+import main.java.org.project.cvmanagement.repository.CandidateRepository;
+import main.java.org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
+import main.java.org.project.cvmanagement.service.CandidateService;
+import main.java.org.project.cvmanagement.service.impl.CandidateServiceImpl;
 
 public class Main {
     public static void main(String[] args) {

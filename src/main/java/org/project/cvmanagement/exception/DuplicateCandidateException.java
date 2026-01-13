@@ -1,4 +1,4 @@
-package org.project.cvmanagement.exception;
+package main.java.org.project.cvmanagement.exception;
 
 
 public class DuplicateCandidateException extends BusinessException {

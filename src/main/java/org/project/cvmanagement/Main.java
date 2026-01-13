@@ -6,8 +6,13 @@ import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.service.impl.CandidateServiceImpl;
 
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
+
+
+
         CandidateRepository candidateRepository =
                 new CandidateRepositoryImpl();
 
@@ -25,8 +30,7 @@ public class Main {
         candidateService.addCandidate(candidate);
         System.out.println("Candidate created successfully");
 
-        candidateService.addCandidate(candidate);
-        System.out.println("Candidate created successfully");
+
 
 
         // TODO:

@@ -56,7 +56,27 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public void updateCandidate(Candidate candidate) {
+        if (candidate == null || CommonUtil.isBlank(candidate.getId())) {
+            throw new BusinessException("Invalid candidate data");
+        }
 
+
+        Candidate existingCandidate = candidateRepository.findById(candidate.getId());
+
+        // kt null
+        if (existingCandidate == null) {
+            System.err.println("No candidates found.: " + candidate.getId());
+            throw new CandidateNotFoundException("The candidate does not exist.: " + candidate.getId());
+        }
+
+
+        existingCandidate.setFullName(candidate.getFullName());
+        existingCandidate.setEmail(candidate.getEmail());
+        existingCandidate.setYearsOfExperience(candidate.getYearsOfExperience());
+
+        candidateRepository.save(existingCandidate);
+
+        System.out.println("Update successful: " + candidate.getId());
     }
 
     @Override
@@ -65,7 +85,6 @@ public class CandidateServiceImpl implements CandidateService {
         /*
         Candidate candidate = candidateRepository.findById(candidateId);
         if (candidate == null) {
-            System.err.println("Candidate not found: " + candidateId);
             throw new CandidateNotFoundException("ID does not exist: " + candidateId);
         }
 

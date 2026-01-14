@@ -29,7 +29,7 @@ public class Main {
             System.out.println("======= CV Management system =======");
             System.out.println("1: Add candidate");
             System.out.println("2: Deactivate Candidate");
-            System.out.println("3: Search candidate by name");
+            System.out.println("3: Update information ");
             System.out.println("Please enter your choice : ");
 
             String choice = sc.nextLine();
@@ -42,7 +42,7 @@ public class Main {
 
                     break;
                 case "3":
-
+                    handleUpdateCandidate();
                     break;
             }
         }
@@ -84,4 +84,26 @@ public class Main {
     }
 
    */
+  private void handleUpdateCandidate() {
+      try {
+          System.out.println("====== Update Candidate ======");
+          System.out.print("Enter id to update: ");
+          String id = sc.nextLine();
+
+          System.out.print("full name: ");
+          String name = sc.nextLine();
+          System.out.print("Update email: ");
+          String email = sc.nextLine();
+          System.out.print("update years of experience: ");
+          int yoe = Integer.parseInt(sc.nextLine());
+
+
+          Candidate updateInfo = new Candidate(id, name, email, yoe, null);
+
+          candidateService.updateCandidate(updateInfo);
+
+      } catch (Exception e) {
+          System.err.println("error: " + e.getMessage());
+      }
+  }
 }

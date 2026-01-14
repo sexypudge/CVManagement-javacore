@@ -4,6 +4,7 @@ import org.project.cvmanagement.common.CommonConstant;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.enums.CandidateStatus;
 import org.project.cvmanagement.exception.BusinessException;
+import org.project.cvmanagement.exception.CandidateNotFoundException;
 import org.project.cvmanagement.exception.DuplicateCandidateException;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.service.CandidateService;
@@ -27,6 +28,12 @@ public class CandidateServiceImpl implements CandidateService {
         }
 
         if (CommonUtil.isBlank(candidate.getId())) {
+            throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
+        }
+        if (CommonUtil.isBlank(candidate.getFullName())) {
+            throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
+        }
+        if (CommonUtil.isBlank(candidate.getEmail())) {
             throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
         }
         // TODO: validate name, email
@@ -55,7 +62,23 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     public void deactivateCandidate(String candidateId) {
 
+        /*
+        Candidate candidate = candidateRepository.findById(candidateId);
+        if (candidate == null) {
+            System.err.println("Candidate not found: " + candidateId);
+            throw new CandidateNotFoundException("ID does not exist: " + candidateId);
+        }
+
+        candidate.setStatus(CandidateStatus.INACTIVE);
+        candidateRepository.save(candidate);
+
+        System.out.println("Deactivated candidate with candidateId: " + candidateId);
+
+         */
     }
+
+
+
 
     @Override
     public Candidate getById(String candidateId) {

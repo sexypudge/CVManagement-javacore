@@ -6,7 +6,7 @@ public class Candidate {
     // TODO: fields
     // id, fullName, email, yearsOfExperience, status
 
-    // TODO: constructor
+    // TODO: constructora
     // TODO: getters/setters
 
     private String id;

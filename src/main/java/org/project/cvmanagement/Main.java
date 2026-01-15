@@ -2,13 +2,22 @@ package org.project.cvmanagement;
 
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.enums.CandidateStatus;
+import org.project.cvmanagement.enums.Level;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
+import org.project.cvmanagement.service.CVService;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.service.impl.CandidateServiceImpl;
+import org.project.cvmanagement.domain.CV;
+import org.project.cvmanagement.enums.CVStatus;
 
 
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
     private static Scanner sc = new Scanner(System.in);
@@ -16,6 +25,22 @@ public class Main {
     private static CandidateService candidateService = new CandidateServiceImpl(candidateRepository);
 
     private static CandidateStatus candidateStatus;
+    private static CVService cvService = new CVService()
+        @Override
+        public void createCV(CV cv) {
+
+        }
+
+        @Override
+        public void submitCV(String cvId) {
+
+        }
+
+        @Override
+        public CV getById(String cvId) {
+            return null;
+        }
+
 
 
     public static void main(String[] args) {
@@ -32,8 +57,8 @@ public class Main {
     public void showMenu(){
         while(true){
             System.out.println("1. Add candidate\n" +
-                    "2. Create CV\n" +
-                    "3. Submit CV\n" +
+                    "2. Deactivate candidate\n" +
+                    "3. Create new CV\n" +
                     "4. Add job position\n" +
                     "5. Apply CV to job\n" +
                     "6. Evaluate CV\n" +
@@ -54,10 +79,10 @@ public class Main {
                     processAddCandidate();
                     break;
                 case 2:
-                    System.out.println("Under construction");
+                    deactivateCandidate();
                     break;
                 case 3:
-                    System.out.println("Under construction");
+                    processAddCV();
                     break;
                 case 4:
                     System.out.println("Under construction");
@@ -82,7 +107,7 @@ public class Main {
             }
         }
     }
-    public static void processAddCandidate(){
+    private static void processAddCandidate(){
         System.out.println("--- ADD NEW CANDIDATE ---");
         try {
             System.out.print("Enter ID: ");
@@ -104,7 +129,7 @@ public class Main {
                     fullName,
                     email,
                     yoe,
-                    candidateStatus.ACTIVE
+                    null
             );
             candidateService.addCandidate(newCandidate);
             System.out.println("Success: Candidate added successfully!");
@@ -116,5 +141,50 @@ public class Main {
             System.err.println("Error: " + e.getMessage());
         }
 
+    }
+    private static void deactivateCandidate(){
+        System.out.println("Type the id of the Candidate to delete: ");
+        sc.nextLine();
+        String id = sc.nextLine();
+        candidateService.deactivateCandidate(id);
+    }
+    private static void showList(){
+        System.out.println("----THE LIST OF CANDIDATES----");
+
+    }
+    private static void processAddCV(){
+        System.out.println("Enter CV ID:");
+        sc.nextLine();
+        String cvId = sc.nextLine();
+
+        System.out.println("Enter Candidate ID:");
+        String candidateId = sc.nextLine();
+
+
+
+        System.out.println("Enter skills (comma separated, e.g. Java,SQL):");
+        String rawSkills = sc.nextLine();
+        List<String> skills = Arrays.stream(rawSkills.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+
+
+        Level level = null;
+
+
+
+        CVStatus status = null;
+
+
+
+
+        CV cv = new CV(cvId, candidateId, skills, level, status);
+
+
+
+        System.out.println("-----------------------------");
+        System.out.println("CV Created Successfully:");
+        System.out.println(cv.toString());
     }
 }

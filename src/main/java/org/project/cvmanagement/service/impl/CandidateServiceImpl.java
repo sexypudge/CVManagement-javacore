@@ -65,7 +65,13 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public void deactivateCandidate(String candidateId) {
-
+        boolean existed = candidateRepository.findById(candidateId).isPresent();
+        if(!existed){
+            System.out.println("Your candidate is not existed");
+        }else{
+            candidateRepository.deleteById(candidateId);
+            System.out.println("Successfully deleted candidate with candidateId: " + candidateId);
+        }
     }
 
     @Override

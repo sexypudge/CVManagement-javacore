@@ -29,6 +29,7 @@ public class CandidateRepositoryImpl implements CandidateRepository {
 
     @Override
     public void deleteById(String s) {
+        storage.remove(s);
 
     }
 }

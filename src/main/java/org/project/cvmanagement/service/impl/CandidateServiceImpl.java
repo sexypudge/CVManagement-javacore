@@ -60,7 +60,7 @@ public class CandidateServiceImpl implements CandidateService {
             throw new BusinessException("Invalid candidate data");
         }
 
-        Candidate existed = candidateRepository.findById(candidate.getId()).orElseThrow(()-> new RuntimeException("Candidate not found"));
+        Candidate existed = candidateRepository.findById(candidate.getId()).orElseThrow(() -> new RuntimeException("Candidate not found"));
 
 
         // kt null
@@ -79,7 +79,7 @@ public class CandidateServiceImpl implements CandidateService {
     public void deactivateCandidate(String candidateId) {
 
 
-        Candidate candidate = candidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Candidate not found"));
+        Candidate candidate = candidateRepository.findById(candidateId).orElseThrow(() -> new RuntimeException("Candidate not found"));
 
         candidate.setStatus(CandidateStatus.INACTIVE);
         candidateRepository.save(candidate);
@@ -89,9 +89,6 @@ public class CandidateServiceImpl implements CandidateService {
 
     }
 
-
-
-
     @Override
     public Candidate getById(String candidateId) {
         return null;
@@ -99,6 +96,9 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public List<Candidate> searchByName(String keyword) {
-        return List.of();
+        if (keyword == null || keyword.isEmpty()) {
+            return candidateRepository.findAll();
+        }
+        return candidateRepository.findByFullName(keyword);
     }
 }

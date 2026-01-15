@@ -31,4 +31,15 @@ public class CandidateRepositoryImpl implements CandidateRepository {
     public void deleteById(String s) {
 
     }
+
+    @Override
+    public List<Candidate> findByFullName(String fullName) {
+        List<Candidate> result = new java.util.ArrayList<>();
+        for (Candidate candidate : storage.values()) {
+            if (candidate.getFullName().toLowerCase().contains(fullName.toLowerCase())) {
+                result.add(candidate);
+            }
+        }
+        return result;
+    }
 }

@@ -6,6 +6,7 @@ import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.service.impl.CandidateServiceImpl;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -30,6 +31,7 @@ public class Main {
             System.out.println("1: Add candidate");
             System.out.println("2: Deactivate Candidate");
             System.out.println("3: Update information ");
+            System.out.println("4: Search candidate by name ");
             System.out.println("Please enter your choice : ");
 
             String choice = sc.nextLine();
@@ -44,6 +46,8 @@ public class Main {
                 case "3":
                     handleUpdateCandidate();
                     break;
+                case "4":
+                    handleSearchByname();
             }
         }
     }
@@ -105,5 +109,30 @@ public class Main {
       } catch (Exception e) {
           System.err.println("error: " + e.getMessage());
       }
+  }
+  private void handleSearchByname(){
+      try {
+          System.out.println("====== Search Candidate By Name ======");
+          System.out.print("Enter name to search: ");
+          String keyword = sc.nextLine();
+
+          List<Candidate> results = candidateService.searchByName(keyword);
+          if (results.isEmpty()){
+              System.out.println("No candidates found.");
+          }else {
+              System.out.println(" Candidate: ");
+              for (Candidate candidate : results){
+                  System.out.println(" candidate :"+ candidate);
+                  System.out.println(" id: " + candidate.getId());
+                  System.out.println("Name: "+ candidate.getFullName());
+                  System.out.println("Email: "+ candidate.getEmail());
+                  System.out.println("Experience:" +candidate.getYearsOfExperience());
+              }
+          }
+
+      }catch (Exception e){
+          System.out.println("error"+ e.getMessage());
+      }
+
   }
 }

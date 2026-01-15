@@ -33,10 +33,10 @@ public class CandidateServiceImpl implements CandidateService {
             throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
         }
         // TODO: validate name, email
-        if (!CommonUtil.isValidName(candidate.getFullName())){
+        if (!CommonUtil.isValidName(candidate.getFullName())) {
             throw new BusinessException("Invalid name.");
         }
-        if (!CommonUtil.isValidEmail(candidate.getEmail())){
+        if (!CommonUtil.isValidEmail(candidate.getEmail())) {
             throw new BusinessException("Invalid email.");
         }
 
@@ -64,10 +64,10 @@ public class CandidateServiceImpl implements CandidateService {
         if (CommonUtil.isBlank(candidate.getId())) {
             throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
         }
-        if (!CommonUtil.isValidName(candidate.getFullName())){
+        if (!CommonUtil.isValidName(candidate.getFullName())) {
             throw new BusinessException("Invalid name.");
         }
-        if (!CommonUtil.isValidEmail(candidate.getEmail())){
+        if (!CommonUtil.isValidEmail(candidate.getEmail())) {
             throw new BusinessException("Invalid email.");
         }
 

@@ -60,21 +60,17 @@ public class CandidateServiceImpl implements CandidateService {
             throw new BusinessException("Invalid candidate data");
         }
 
+        Candidate existed = candidateRepository.findById(candidate.getId()).orElseThrow(()-> new RuntimeException("Candidate not found"));
 
-        Candidate existingCandidate = candidateRepository.findById(candidate.getId());
 
         // kt null
-        if (existingCandidate == null) {
-            System.err.println("No candidates found.: " + candidate.getId());
-            throw new CandidateNotFoundException("The candidate does not exist.: " + candidate.getId());
-        }
 
 
-        existingCandidate.setFullName(candidate.getFullName());
-        existingCandidate.setEmail(candidate.getEmail());
-        existingCandidate.setYearsOfExperience(candidate.getYearsOfExperience());
+        existed.setFullName(candidate.getFullName());
+        existed.setEmail(candidate.getEmail());
+        existed.setYearsOfExperience(candidate.getYearsOfExperience());
 
-        candidateRepository.save(existingCandidate);
+        candidateRepository.save(existed);
 
         System.out.println("Update successful: " + candidate.getId());
     }
@@ -82,18 +78,15 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     public void deactivateCandidate(String candidateId) {
 
-        /*
-        Candidate candidate = candidateRepository.findById(candidateId);
-        if (candidate == null) {
-            throw new CandidateNotFoundException("ID does not exist: " + candidateId);
-        }
+
+        Candidate candidate = candidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Candidate not found"));
 
         candidate.setStatus(CandidateStatus.INACTIVE);
         candidateRepository.save(candidate);
 
         System.out.println("Deactivated candidate with candidateId: " + candidateId);
 
-         */
+
     }
 
 

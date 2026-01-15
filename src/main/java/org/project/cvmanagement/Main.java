@@ -39,7 +39,7 @@ public class Main {
                     handleAddCandidate();
                     break;
                 case "2":
-
+                    handleDeactivateCandidate();
                     break;
                 case "3":
                     handleUpdateCandidate();
@@ -69,7 +69,7 @@ public class Main {
             System.err.println("Error: " + e.getMessage());
         }
     }
-  /*
+
     private void handleDeactivateCandidate() {
         try {
             System.out.println("====== Deactivate candidate======");
@@ -83,7 +83,7 @@ public class Main {
         }
     }
 
-   */
+
   private void handleUpdateCandidate() {
       try {
           System.out.println("====== Update Candidate ======");

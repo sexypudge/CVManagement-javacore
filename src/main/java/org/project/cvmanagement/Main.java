@@ -11,16 +11,25 @@ import org.project.cvmanagement.service.impl.CandidateServiceImpl;
 import java.util.Scanner;
 
 public class Main {
-    private static Scanner sc;
-    private static CandidateService candidateService;
+    private static Scanner sc = new Scanner(System.in);
+    private static CandidateRepository candidateRepository = new CandidateRepositoryImpl();
+    private static CandidateService candidateService = new CandidateServiceImpl(candidateRepository);
 
     private static CandidateStatus candidateStatus;
-    private static CandidateRepository candidateRepository;
+
 
     public static void main(String[] args) {
-        sc = new Scanner(System.in);
-        candidateRepository = new CandidateRepositoryImpl();
-        candidateService = new CandidateServiceImpl(candidateRepository);
+        Main main = new Main();
+        main.showMenu();
+
+
+        // TODO:
+        // 1. init services
+        // 2. show menu
+        // 3. read input
+        // 4. call service
+    }
+    public void showMenu(){
         while(true){
             System.out.println("1. Add candidate\n" +
                     "2. Create CV\n" +
@@ -72,21 +81,6 @@ public class Main {
                     System.out.println("Choose a number from 1-9");
             }
         }
-
-
-
-
-
-
-
-
-
-
-        // TODO:
-        // 1. init services
-        // 2. show menu
-        // 3. read input
-        // 4. call service
     }
     public static void processAddCandidate(){
         System.out.println("--- ADD NEW CANDIDATE ---");
@@ -112,10 +106,7 @@ public class Main {
                     yoe,
                     candidateStatus.ACTIVE
             );
-
-
             candidateService.addCandidate(newCandidate);
-
             System.out.println("Success: Candidate added successfully!");
 
         } catch (NumberFormatException e) {

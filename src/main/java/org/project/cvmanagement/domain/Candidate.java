@@ -6,7 +6,7 @@ public class Candidate {
     // TODO: fields
     // id, fullName, email, yearsOfExperience, status
 
-    // TODO: constructor
+    // TODO: constructora
     // TODO: getters/setters
 
     private String id;
@@ -37,12 +37,24 @@ public class Candidate {
         return fullName;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public int getYearsOfExperience() {
         return yearsOfExperience;
+    }
+
+    public void setYearsOfExperience(int yearsOfExperience) {
+        this.yearsOfExperience = yearsOfExperience;
     }
 
     public CandidateStatus getStatus() {

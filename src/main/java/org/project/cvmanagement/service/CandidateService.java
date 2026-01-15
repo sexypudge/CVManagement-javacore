@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CandidateService {
 
+
     void addCandidate(Candidate candidate);
 
     void updateCandidate(Candidate candidate);

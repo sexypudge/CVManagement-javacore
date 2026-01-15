@@ -4,6 +4,7 @@ import org.project.cvmanagement.common.CommonConstant;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.enums.CandidateStatus;
 import org.project.cvmanagement.exception.BusinessException;
+import org.project.cvmanagement.exception.CandidateNotFoundException;
 import org.project.cvmanagement.exception.DuplicateCandidateException;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.service.CandidateService;
@@ -29,6 +30,12 @@ public class CandidateServiceImpl implements CandidateService {
         if (CommonUtil.isBlank(candidate.getId())) {
             throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
         }
+        if (CommonUtil.isBlank(candidate.getFullName())) {
+            throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
+        }
+        if (CommonUtil.isBlank(candidate.getEmail())) {
+            throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
+        }
         // TODO: validate name, email
 
         System.out.println("Adding candidate with candidateId: " + candidate.getId());
@@ -49,13 +56,41 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public void updateCandidate(Candidate candidate) {
+        if (candidate == null || CommonUtil.isBlank(candidate.getId())) {
+            throw new BusinessException("Invalid candidate data");
+        }
 
+        Candidate existed = candidateRepository.findById(candidate.getId()).orElseThrow(()-> new RuntimeException("Candidate not found"));
+
+
+        // kt null
+
+
+        existed.setFullName(candidate.getFullName());
+        existed.setEmail(candidate.getEmail());
+        existed.setYearsOfExperience(candidate.getYearsOfExperience());
+
+        candidateRepository.save(existed);
+
+        System.out.println("Update successful: " + candidate.getId());
     }
 
     @Override
     public void deactivateCandidate(String candidateId) {
 
+
+        Candidate candidate = candidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Candidate not found"));
+
+        candidate.setStatus(CandidateStatus.INACTIVE);
+        candidateRepository.save(candidate);
+
+        System.out.println("Deactivated candidate with candidateId: " + candidateId);
+
+
     }
+
+
+
 
     @Override
     public Candidate getById(String candidateId) {

@@ -8,6 +8,7 @@ import org.project.cvmanagement.exception.DuplicateCandidateException;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.util.CommonUtil;
+import java.util.regex.Pattern;
 
 import java.util.List;
 
@@ -30,6 +31,16 @@ public class CandidateServiceImpl implements CandidateService {
             throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
         }
         // TODO: validate name, email
+        if (candidate.getFullName()==null||candidate.getFullName().length()<2){
+            throw new BusinessException("The name field can not be null and no less than 2 characters");
+        }
+        if (candidate.getFullName().matches(".*\\d.*")){
+            throw new BusinessException("The name can not contain digits");
+        }
+        boolean validSyntax = candidate.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        if(!validSyntax){
+            throw new BusinessException("Email is invalid, example: user@example.com");
+        }
 
         System.out.println("Adding candidate with candidateId: " + candidate.getId());
         // Check duplicate

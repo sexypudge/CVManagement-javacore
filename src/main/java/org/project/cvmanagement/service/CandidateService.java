@@ -16,6 +16,5 @@ public interface CandidateService {
     Candidate getById(String candidateId);
 
     List<Candidate> searchByName(String keyword);
-    List<Candidate> getAllCandidate();
 }
 

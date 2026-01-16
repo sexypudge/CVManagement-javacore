@@ -83,4 +83,6 @@ public class CandidateServiceImpl implements CandidateService {
     public List<Candidate> searchByName(String keyword) {
         return List.of();
     }
+    @Override
+    public List<Candidate> getAllCandidate(){return candidateRepository.findAll();}
 }

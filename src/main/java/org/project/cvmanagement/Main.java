@@ -3,10 +3,13 @@ package org.project.cvmanagement;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.enums.CandidateStatus;
 import org.project.cvmanagement.enums.Level;
+import org.project.cvmanagement.repository.CVRespository;
 import org.project.cvmanagement.repository.CandidateRepository;
+import org.project.cvmanagement.repository.impl.CVRespositoryImpl;
 import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
 import org.project.cvmanagement.service.CVService;
 import org.project.cvmanagement.service.CandidateService;
+import org.project.cvmanagement.service.impl.CVServiceImpl;
 import org.project.cvmanagement.service.impl.CandidateServiceImpl;
 import org.project.cvmanagement.domain.CV;
 import org.project.cvmanagement.enums.CVStatus;
@@ -25,21 +28,10 @@ public class Main {
     private static CandidateService candidateService = new CandidateServiceImpl(candidateRepository);
 
     private static CandidateStatus candidateStatus;
-    private static CVService cvService = new CVService()
-        @Override
-        public void createCV(CV cv) {
 
-        }
+    private static CVRespository cvRespository = new CVRespositoryImpl();
+    private static CVService cvService = new CVServiceImpl(cvRespository);
 
-        @Override
-        public void submitCV(String cvId) {
-
-        }
-
-        @Override
-        public CV getById(String cvId) {
-            return null;
-        }
 
 
 
@@ -59,7 +51,7 @@ public class Main {
             System.out.println("1. Add candidate\n" +
                     "2. Deactivate candidate\n" +
                     "3. Create new CV\n" +
-                    "4. Add job position\n" +
+                    "4. Show list candidates\n" +
                     "5. Apply CV to job\n" +
                     "6. Evaluate CV\n" +
                     "7. Show candidate report\n" +
@@ -85,7 +77,7 @@ public class Main {
                     processAddCV();
                     break;
                 case 4:
-                    System.out.println("Under construction");
+                    showList();
                     break;
                 case 5:
                     System.out.println("Under construction");
@@ -150,6 +142,15 @@ public class Main {
     }
     private static void showList(){
         System.out.println("----THE LIST OF CANDIDATES----");
+        List<Candidate> candidates = candidateRepository.findAll();
+        if(candidates.isEmpty()){
+            System.out.println("There is no candidate");
+        }
+        System.out.println("The amount of candidates: "+candidates.size());
+        for(Candidate candidate: candidates){
+            System.out.println(candidate.toString());
+        }
+
 
     }
     private static void processAddCV(){

@@ -3,10 +3,7 @@ package org.project.cvmanagement.repository.impl;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.repository.CandidateRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class CandidateRepositoryImpl implements CandidateRepository {
 
@@ -24,7 +21,7 @@ public class CandidateRepositoryImpl implements CandidateRepository {
 
     @Override
     public List<Candidate> findAll() {
-        return List.of();
+        return new ArrayList<>(storage.values());
     }
 
     @Override

@@ -1,10 +1,14 @@
 package org.project.cvmanagement;
 
 import org.project.cvmanagement.domain.Candidate;
+import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
+import org.project.cvmanagement.service.CVService;
 import org.project.cvmanagement.service.CandidateService;
+import org.project.cvmanagement.service.impl.CVServiceImpl;
 import org.project.cvmanagement.service.impl.CandidateServiceImpl;
+import org.project.cvmanagement.repository.impl.CVRepositoryImpl;
 
 import java.util.List;
 import java.util.Scanner;
@@ -14,6 +18,8 @@ public class Main {
 
     static CandidateRepository candidateRepo = new CandidateRepositoryImpl();
     static CandidateService candidateService = new CandidateServiceImpl(candidateRepo);
+    static CVRepository cvRepo = new CVRepositoryImpl();
+    static CVService cvService = new CVServiceImpl(cvRepo, candidateRepo);
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -24,7 +30,7 @@ public class Main {
         // 3. read input
         // 4. call service
     }
-
+    // menu
     public void showMenu() {
         while (true) {
             System.out.println("======= CV Management system =======");
@@ -32,6 +38,7 @@ public class Main {
             System.out.println("2: Deactivate Candidate");
             System.out.println("3: Update information ");
             System.out.println("4: Search candidate by name ");
+            System.out.println("5:Create CV for candidate");
             System.out.println("Please enter your choice : ");
 
             String choice = sc.nextLine();
@@ -48,10 +55,14 @@ public class Main {
                     break;
                 case "4":
                     handleSearchByname();
+                    break;
+                case "5":
+                    handleCreateCV();
+                    break;
             }
         }
     }
-
+    // add new candidate
     private void handleAddCandidate() {
         try {
             System.out.println("====== Add new candidate ======");
@@ -73,7 +84,7 @@ public class Main {
             System.err.println("Error: " + e.getMessage());
         }
     }
-
+    //deactive status candidate
     private void handleDeactivateCandidate() {
         try {
             System.out.println("====== Deactivate candidate======");
@@ -87,52 +98,81 @@ public class Main {
         }
     }
 
+    // update candidate infor
+    private void handleUpdateCandidate() {
+        try {
+            System.out.println("====== Update Candidate ======");
+            System.out.print("Enter id to update: ");
+            String id = sc.nextLine();
 
-  private void handleUpdateCandidate() {
-      try {
-          System.out.println("====== Update Candidate ======");
-          System.out.print("Enter id to update: ");
-          String id = sc.nextLine();
-
-          System.out.print("full name: ");
-          String name = sc.nextLine();
-          System.out.print("Update email: ");
-          String email = sc.nextLine();
-          System.out.print("update years of experience: ");
-          int yoe = Integer.parseInt(sc.nextLine());
+            System.out.print("full name: ");
+            String name = sc.nextLine();
+            System.out.print("Update email: ");
+            String email = sc.nextLine();
+            System.out.print("update years of experience: ");
+            int yoe = Integer.parseInt(sc.nextLine());
 
 
-          Candidate updateInfo = new Candidate(id, name, email, yoe, null);
+            Candidate updateInfo = new Candidate(id, name, email, yoe, null);
 
-          candidateService.updateCandidate(updateInfo);
+            candidateService.updateCandidate(updateInfo);
 
-      } catch (Exception e) {
-          System.err.println("error: " + e.getMessage());
-      }
-  }
-  private void handleSearchByname(){
-      try {
-          System.out.println("====== Search Candidate By Name ======");
-          System.out.print("Enter name to search: ");
-          String keyword = sc.nextLine();
+        } catch (Exception e) {
+            System.err.println("error: " + e.getMessage());
+        }
+    }
+    // search by name candidate
+    private void handleSearchByname() {
+        try {
+            System.out.println("====== Search Candidate By Name ======");
+            System.out.print("Enter name to search: ");
+            String keyword = sc.nextLine();
 
-          List<Candidate> results = candidateService.searchByName(keyword);
-          if (results.isEmpty()){
-              System.out.println("No candidates found.");
-          }else {
-              System.out.println(" Candidate: ");
-              for (Candidate candidate : results){
-                  System.out.println(" candidate :"+ candidate);
-                  System.out.println(" id: " + candidate.getId());
-                  System.out.println("Name: "+ candidate.getFullName());
-                  System.out.println("Email: "+ candidate.getEmail());
-                  System.out.println("Experience:" +candidate.getYearsOfExperience());
-              }
-          }
+            List<Candidate> results = candidateService.searchByName(keyword);
+            if (results.isEmpty()) {
+                System.out.println("No candidates found.");
+            } else {
+                System.out.println(" Candidate: ");
+                for (Candidate candidate : results) {
+                    System.out.println(" candidate :" + candidate);
+                    System.out.println(" id: " + candidate.getId());
+                    System.out.println("Name: " + candidate.getFullName());
+                    System.out.println("Email: " + candidate.getEmail());
+                    System.out.println("Experience:" + candidate.getYearsOfExperience());
+                }
+            }
 
-      }catch (Exception e){
-          System.out.println("error"+ e.getMessage());
-      }
+        } catch (Exception e) {
+            System.out.println("error" + e.getMessage());
+        }
 
-  }
+    }
+    // create cv
+    private void handleCreateCV() {
+        try {
+            System.out.println("====== Create New CV ======");
+            System.out.print("Enter candidate ID: ");
+            String candidateId = sc.nextLine();
+
+            System.out.print("Enter cv ID: ");
+            String cvId = sc.nextLine();
+
+            System.out.print("Enter skills : ");
+            String skillsInput = sc.nextLine();
+            List<String> skills = java.util.Arrays.asList(skillsInput.split(","));
+
+            System.out.println("Select Level (1: INTERN, 2: FRESHER, 3: JUNIOR, 4: MIDDLE, 5: SENIOR): ");
+            int levelChoice = Integer.parseInt(sc.nextLine());
+            org.project.cvmanagement.enums.Level level = org.project.cvmanagement.enums.Level.values()[levelChoice - 1];
+
+            org.project.cvmanagement.domain.CV cv = new org.project.cvmanagement.domain.CV(cvId, candidateId, skills, level, null);
+            cvService.createCV(cv);
+
+            System.out.println("CV created in DRAFT status.");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+
 }

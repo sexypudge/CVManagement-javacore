@@ -112,6 +112,9 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public List<Candidate> searchByName(String keyword) {
-        return List.of();
+        if(keyword == null || keyword.isEmpty()){
+            return candidateRepository.findAll();
+        }
+        return candidateRepository.findByFullName(keyword);
     }
 }

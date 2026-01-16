@@ -10,6 +10,8 @@ import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.service.CVService;
 import org.project.cvmanagement.util.CommonUtil;
 
+import java.util.Optional;
+
 public class CVServiceImpl implements CVService {
     public final CVRepository cvRepository;
 
@@ -31,7 +33,7 @@ public class CVServiceImpl implements CVService {
         boolean existed = cvRepository.findById(cv.getId()).isPresent();
         if (existed) {
             System.err.println("Duplicate cv (same id)" + cv.getId());
-            throw  new DuplicateCVException(cv.getId());
+            throw new DuplicateCVException(cv.getId());
         }
         cv.setLevel(Level.INTERN);
         cv.setStatus(CVStatus.DRAFT);
@@ -43,11 +45,18 @@ public class CVServiceImpl implements CVService {
 
     @Override
     public void submitCV(String cvId) {
-        if (CommonUtil.isBlank(cvId)){
+        if (CommonUtil.isBlank(cvId)) {
             throw new BusinessException(CommonConstant.REQUIRED_CV_ERROR_MESSAGE);
         }
+        CV cv = cvRepository.findById(cvId).orElseThrow(() -> new BusinessException("CV not found."));
 
+        if (cv.getStatus() != CVStatus.DRAFT) {
+            throw new BusinessException("CV should be DRAFT before submit.");
+        }
+        cv.setStatus(CVStatus.SUBMITTED);
+        cvRepository.save(cv);
     }
+
 
     @Override
     public CV getById(String cvId) {

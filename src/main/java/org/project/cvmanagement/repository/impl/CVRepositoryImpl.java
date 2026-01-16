@@ -4,10 +4,7 @@ import org.project.cvmanagement.domain.CV;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.repository.CVRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 public class CVRepositoryImpl implements CVRepository {
@@ -33,4 +30,9 @@ public class CVRepositoryImpl implements CVRepository {
     public void deleteById(String s) {
 
     }
+    @Override
+    public List<Candidate> findByFullName(String fullName) {
+        return null;
+    }
+
 }

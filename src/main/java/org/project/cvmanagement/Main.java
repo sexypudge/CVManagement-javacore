@@ -187,7 +187,7 @@ public class Main {
         System.out.print("Enter candidate ID to view the list of cv: ");
         String candidateId = sc.nextLine();
 
-        // Sử dụng hàm đã viết trong Service có dùng Stream API
+     
         List<CV> cvList = cvService.getCVsByCandidate(candidateId);
 
         if (cvList.isEmpty()) {

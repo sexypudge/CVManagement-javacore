@@ -183,7 +183,7 @@ public class Main {
             System.err.println("Error: " + e.getMessage());
         }
     }
-    // list all cv of candidate
+    //list cv of candidate
     private void handleViewCVsByCandidate() {
         System.out.print("Enter candidate ID to view the list of cv: ");
         String candidateId = sc.nextLine();
@@ -196,13 +196,13 @@ public class Main {
             System.out.println("List of canidate's cv " + candidateId + " ---");
             cvList.forEach(cv -> {
                 System.out.println("ID CV: " + cv.getId() +
-                        " Level: " + cv.getLevel() +
-                        " Status: " + cv.getStatus() +
-                        " Skills: " + cv.getSkills());
+                        " | Level: " + cv.getLevel() +
+                        " | Status: " + cv.getStatus() +
+                        " | Skills: " + cv.getSkills());
             });
         }
     }
-    // update info of cv
+    // update cv.
     private void handleUpdateCV() {
         System.out.print("Enter cv ID needs update: ");
         String cvId = sc.nextLine();

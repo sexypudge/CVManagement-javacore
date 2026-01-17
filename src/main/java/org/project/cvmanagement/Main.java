@@ -1,6 +1,8 @@
 package org.project.cvmanagement;
 
+import org.project.cvmanagement.domain.CV;
 import org.project.cvmanagement.domain.Candidate;
+import org.project.cvmanagement.enums.Level;
 import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
@@ -39,6 +41,8 @@ public class Main {
             System.out.println("3: Update information ");
             System.out.println("4: Search candidate by name ");
             System.out.println("5:Create CV for candidate");
+            System.out.println("6: show all cv of candidate");
+            System.out.println("7;  update cv of candidate");
             System.out.println("Please enter your choice : ");
 
             String choice = sc.nextLine();
@@ -58,6 +62,12 @@ public class Main {
                     break;
                 case "5":
                     handleCreateCV();
+                    break;
+                case "6":
+                    handleViewCVsByCandidate();
+                    break;
+                case "7":
+                    handleUpdateCV();
                     break;
             }
         }
@@ -172,6 +182,39 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
+    }
+    private void handleViewCVsByCandidate() {
+        System.out.print("Enter candidate ID to view the list of cv: ");
+        String candidateId = sc.nextLine();
+
+        // Sử dụng hàm đã viết trong Service có dùng Stream API
+        List<CV> cvList = cvService.getCVsByCandidate(candidateId);
+
+        if (cvList.isEmpty()) {
+            System.out.println("candidate does not have a CV..");
+        } else {
+            System.out.println("List of canidate's cv " + candidateId + " ---");
+            cvList.forEach(cv -> {
+                System.out.println("ID CV: " + cv.getId() +
+                        " | Level: " + cv.getLevel() +
+                        " | Status: " + cv.getStatus() +
+                        " | Skills: " + cv.getSkills());
+            });
+        }
+    }
+    private void handleUpdateCV() {
+        System.out.print("Enter cv ID needs update: ");
+        String cvId = sc.nextLine();
+
+        System.out.print("Import a list of new skills: ");
+        String skillsInput = sc.nextLine();
+        List<String> skills = java.util.Arrays.asList(skillsInput.split(","));
+
+        System.out.println("Select new level (1:INTERN, 2:FRESHER, 3:JUNIOR, 4:MIDDLE, 5:SENIOR): ");
+        int levelIdx = Integer.parseInt(sc.nextLine()) - 1;
+        Level level = Level.values()[levelIdx];
+
+        cvService.updateCV(cvId, skills, level);
     }
 
 

@@ -34,7 +34,15 @@ public class CVServiceImpl implements CVService {
 
     @Override
     public void updateCV(String cvId, List<String> skills, Level level) {
+        CV cv = cvRepository.findById(cvId)
+                .orElseThrow(() -> new BusinessException("CV does not exist "));
 
+        // Cập nhật ttin
+        cv.setSkills(skills);
+        cv.setLevel(level);
+
+        cvRepository.save(cv);
+        System.out.println("CV update successful ");
     }
 
     @Override

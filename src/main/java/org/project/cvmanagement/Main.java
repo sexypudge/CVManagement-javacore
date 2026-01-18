@@ -14,15 +14,13 @@ import javax.sound.midi.Soundbank;
 import java.util.Scanner;
 
 public class Main {
+    static Scanner scanner = new Scanner(System.in);
+    static CandidateRepository candidateRepository = new CandidateRepositoryImpl();
+    static CandidateService candidateService = new CandidateServiceImpl(candidateRepository);
+    static CVRepository cvRepository = new CVRepositoryImpl();
+    static CVService cvService = new CVServiceImpl(cvRepository,candidateRepository);
+
     public static void main(String[] args) {
-
-        Scanner scanner = new Scanner(System.in);
-        CandidateRepository candidateRepository = new CandidateRepositoryImpl();
-        CandidateService candidateService = new CandidateServiceImpl(candidateRepository);
-
-        CVRepository cvRepository = new CVRepositoryImpl();
-        CVService cvService = new CVServiceImpl(cvRepository);
-
         while (true) {
             System.out.println("Main menu");
             System.out.println("1. Candidate Service");
@@ -33,32 +31,15 @@ public class Main {
             scanner.nextLine();
             switch (choice) {
                 case 1:
-                    showCandidateService(scanner, candidateService);
+                    showCandidateService(scanner);
                 case 2:
-                    showCVService(scanner, cvService);
+                    showCVService(scanner);
                 case 0:
                     return;
                 default:
                     System.out.println("Invaid input.");
             }
         }
-//        CandidateRepository candidateRepository = new CandidateRepositoryImpl();
-//
-//        CandidateService candidateService = new CandidateServiceImpl(candidateRepository);
-//
-//        Candidate candidate = new Candidate(
-//                "C001",
-//                "Nguyễn Văn Anh",
-//                "a@gmail.com",
-//                2,
-//                null
-//        );
-//
-//        candidateService.addCandidate(candidate);
-//        System.out.println("Candidate created successfully");
-//
-//
-
         // TODO:
         // 1. init services
         // 2. show menu
@@ -66,8 +47,8 @@ public class Main {
         // 4. call service
     }
 
-    public static void showCandidateService(Scanner scanner, CandidateService candidateService) {
-        while (true){
+    public static void showCandidateService(Scanner scanner) {
+        while (true) {
             System.out.println("Candidate service menu");
             System.out.println("1. Add new candidate");
             System.out.println("2. Update candidate");
@@ -77,12 +58,105 @@ public class Main {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
-            switch (choice){
-                case 1: candidateService.addCandidate();
+            switch (choice) {
+                case 1:
+                    handleAddCandidate();
+                case 2:
+                    handleUpdateCandidate();
+                case 3:
+                    handleDeactivateCandidate();
+                case 0:
+                    return;
+            }
+        }
+    }
+    public static void showCVService(Scanner scanner) {
+        while (true) {
+            System.out.println("Candidate service menu");
+            System.out.println("1. Create new cv");
+            System.out.println("2. Update cv");
+            System.out.println("3. Submit cv");
+            System.out.println("0. Back");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    handleCreateCV();
+                case 2:
+                    handleUpdateCV();
+                case 3:
+                    handleSubmitCV();
+                case 0:
+                    return;
             }
         }
     }
 
-    public static void showCVService(Scanner scanner, CVService cvService) {
+    private static void handleAddCandidate() {
+        try {
+            System.out.println("Add new candidate.");
+            System.out.println("Enter Candidate id: ");
+            String id = scanner.nextLine();
+            System.out.println("Enter name: ");
+            String fullName = scanner.nextLine();
+            System.out.println("Enter email: ");
+            String email = scanner.nextLine();
+            System.out.println("Enter year of experience: ");
+            int yearExperience = Integer.parseInt(scanner.nextLine());
+            scanner.nextLine();
+            Candidate candidate = new Candidate(id, fullName, email, yearExperience, null);
+            candidateService.addCandidate(candidate);
+
+            System.out.println("Candidate added.");
+
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void handleUpdateCandidate() {
+        try {
+            System.out.println("Update candidate");
+            System.out.println("Enter id: ");
+            String id = scanner.nextLine();
+            System.out.println("Enter name: ");
+            String fullName = scanner.nextLine();
+            System.out.println("Enter email: ");
+            String email = scanner.nextLine();
+            System.out.println("Enter year of experience: ");
+            int yearExperience = Integer.parseInt(scanner.nextLine());
+
+            Candidate candidate = new Candidate(id, fullName, email, yearExperience, null);
+            candidateService.updateCandidate(candidate);
+
+            System.out.println("Candidate updated.");
+
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+    private static void handleDeactivateCandidate() {
+
+        try {
+            System.out.println("Update candidate");
+            System.out.println("Enter id: ");
+            String id = scanner.nextLine();
+
+            candidateService.deactivateCandidate(id);
+            System.out.println("Deactivated candidate.");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+    private static void handleCreateCV(){
+
+    }
+    private static void handleUpdateCV(){
+
+    }
+    private static void handleSubmitCV(){
+
     }
 }

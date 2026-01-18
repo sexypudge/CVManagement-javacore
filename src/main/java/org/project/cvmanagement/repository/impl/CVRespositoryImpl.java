@@ -4,10 +4,7 @@ import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.repository.CVRespository;
 import org.project.cvmanagement.domain.CV;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class CVRespositoryImpl implements CVRespository {
     private final Map<String, CV> storage = new HashMap<>(); // mô phỏng database bằng 1 HashMap
@@ -24,7 +21,7 @@ public class CVRespositoryImpl implements CVRespository {
 
     @Override
     public List<CV> findAll() {
-        return List.of();
+        return new ArrayList<>(storage.values());
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.project.cvmanagement.common.CommonConstant;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.enums.CandidateStatus;
 import org.project.cvmanagement.exception.BusinessException;
+import org.project.cvmanagement.exception.CandidateNotFoundException;
 import org.project.cvmanagement.exception.DuplicateCandidateException;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.service.CandidateService;
@@ -67,7 +68,8 @@ public class CandidateServiceImpl implements CandidateService {
     public void deactivateCandidate(String candidateId) {
         boolean existed = candidateRepository.findById(candidateId).isPresent();
         if(!existed){
-            System.out.println("Your candidate is not existed");
+            throw new CandidateNotFoundException("Your candidate is not existed");
+
         }else{
             candidateRepository.deleteById(candidateId);
             System.out.println("Successfully deleted candidate with candidateId: " + candidateId);

@@ -51,5 +51,19 @@ public class Candidate {
 
     public void setStatus(CandidateStatus status) {
         this.status = status;
+
+    }
+    // ... Các getter/setter ở trên ...
+
+    @Override
+    public String toString() {
+        return "Candidate {" +
+                "id='" + id + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", experience=" + yearsOfExperience +
+                ", status=" + (status != null ? status : "N/A") +
+                '}';
     }
 }
+

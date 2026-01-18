@@ -34,4 +34,14 @@ public class CV {
     public void setLevel(Level level) {this.level = level;}
     public CVStatus getStatus() {return status;}
     public void setStatus(CVStatus status) {this.status = status;}
+    @Override
+    public String toString() {
+        return "CV {" +
+                "id='" + id + '\'' +
+                ", Candidate Id='" + candidateId + '\'' +
+                ", skills='" + skills + '\'' +
+                ", level=" + level +
+                ", status=" + (status != null ? status : "N/A") +
+                '}';
+    }
 }

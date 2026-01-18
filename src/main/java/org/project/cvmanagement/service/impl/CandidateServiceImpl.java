@@ -4,10 +4,13 @@ import org.project.cvmanagement.common.CommonConstant;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.enums.CandidateStatus;
 import org.project.cvmanagement.exception.BusinessException;
+import org.project.cvmanagement.exception.CandidateNotFoundException;
 import org.project.cvmanagement.exception.DuplicateCandidateException;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.util.CommonUtil;
+
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import java.util.List;
@@ -65,16 +68,27 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public void deactivateCandidate(String candidateId) {
+        boolean existed = candidateRepository.findById(candidateId).isPresent();
+        if(!existed){
+            throw new CandidateNotFoundException("Your candidate is not existed");
 
+        }else{
+            candidateRepository.deleteById(candidateId);
+            System.out.println("Successfully deleted candidate with candidateId: " + candidateId);
+        }
     }
 
     @Override
     public Candidate getById(String candidateId) {
-        return null;
+        Optional<Candidate> candidate=candidateRepository.findById(candidateId);
+        return candidate.get();
     }
 
     @Override
     public List<Candidate> searchByName(String keyword) {
         return List.of();
     }
+    @Override
+    public List<Candidate> getAllCandidate(){return candidateRepository.findAll();}
+
 }

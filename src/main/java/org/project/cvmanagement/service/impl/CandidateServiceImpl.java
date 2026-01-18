@@ -9,6 +9,8 @@ import org.project.cvmanagement.exception.DuplicateCandidateException;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.util.CommonUtil;
+
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import java.util.List;
@@ -78,7 +80,8 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public Candidate getById(String candidateId) {
-        return null;
+        Optional<Candidate> candidate=candidateRepository.findById(candidateId);
+        return candidate.get();
     }
 
     @Override
@@ -87,4 +90,5 @@ public class CandidateServiceImpl implements CandidateService {
     }
     @Override
     public List<Candidate> getAllCandidate(){return candidateRepository.findAll();}
+
 }

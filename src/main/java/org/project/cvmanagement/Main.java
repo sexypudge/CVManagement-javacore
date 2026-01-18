@@ -60,7 +60,7 @@ public class Main {
                     "4. Show list candidates\n" +
                     "5. Show list CVs\n" +
                     "6. Add job position\n" +
-                    "7. Show candidate report\n" +
+                    "7. Find candidate\n" +
                     "8. Statistics\n" +
                     "9. Exit\n");
             System.out.println("<----------------------------->");
@@ -92,7 +92,7 @@ public class Main {
                     processAddJobPosition();
                     break;
                 case 7:
-                    System.out.println("Under construction");
+                    findCandidate();
                     break;
                 case 8:
                     System.out.println("Under construction");
@@ -274,9 +274,33 @@ public class Main {
     }
     private static void findCandidate(){
         System.out.println("Type in your candidate's name or id: ");
-        String candidateIDN = sc.nextLine();
+        sc.nextLine();
 
-
+        boolean completed=false;
+        while(true){
+            System.out.print("1. Search By Name"+"    "+" 2. Search By ID"+"\n");
+            System.out.println("Type here -->");
+            String answer=sc.nextLine();
+            switch (answer){
+                case "1":
+                    System.out.println("Type in candidate's name:");
+                    String candidateName=sc.nextLine();
+                    candidateService.searchByName(candidateName);
+                    completed=true;
+                    break;
+                case "2":
+                    System.out.println("Type in candidate's id:");
+                    String candidateId= sc.nextLine();
+                    System.out.println(candidateService.getById(candidateId).toString());
+                    completed=true;
+                    break;
+                default:
+                    System.out.println("Choose a number 1 or 2");
+            }
+            if(completed){
+                break;
+            }
+        }
     }
 
 }

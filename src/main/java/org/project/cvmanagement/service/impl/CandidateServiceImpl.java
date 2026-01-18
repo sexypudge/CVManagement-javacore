@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CandidateServiceImpl implements CandidateService {
 
@@ -86,7 +87,10 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public List<Candidate> searchByName(String keyword) {
-        return List.of();
+        List<Candidate>candidate=candidateRepository.findAll();
+        return candidate.stream()
+                .filter(c-> c.getFullName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+
     }
     @Override
     public List<Candidate> getAllCandidate(){return candidateRepository.findAll();}

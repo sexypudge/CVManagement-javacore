@@ -4,6 +4,7 @@ import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.enums.CandidateStatus;
 import org.project.cvmanagement.enums.Level;
 import org.project.cvmanagement.exception.BusinessException;
+import org.project.cvmanagement.exception.CandidateNotFoundException;
 import org.project.cvmanagement.exception.DuplicateCandidateException;
 import org.project.cvmanagement.repository.CVRespository;
 import org.project.cvmanagement.repository.CandidateRepository;
@@ -22,6 +23,8 @@ import org.project.cvmanagement.domain.Job;
 import org.project.cvmanagement.service.impl.JobServiceImpl;
 
 
+import javax.security.auth.DestroyFailedException;
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,63 +56,136 @@ public class Main {
         // 4. call service
     }
     public void showMenu(){
-        while(true){
-            System.out.println("1. Add candidate\n" +
-                    "2. Deactivate candidate\n" +
-                    "3. Create new CV\n" +
-                    "4. Show list candidates\n" +
-                    "5. Show list CVs\n" +
-                    "6. Add job position\n" +
-                    "7. Find candidate\n" +
-                    "8. Statistics\n" +
-                    "9. Exit\n");
-            System.out.println("<----------------------------->");
-            System.out.println("Please choose a number: ");
-            int answer;
-            try{
-                answer=sc.nextInt();
-            }catch (NumberFormatException e){
-                System.out.println("Invalid number!");
-                continue;
+
+
+            while (true){
+                System.out.println("1. Candidate Service\n" +
+                        "2. CV Service\n" +
+                        "3. Job Service\n" +
+                        "4. Exit\n");
+                System.out.println("<----------------------------->");
+                System.out.println("Please choose a number: ");
+                int answer;
+                try{
+                    answer=sc.nextInt();
+                    switch (answer){
+                        case 1:
+                            showCandidateMenu();
+                            break;
+                        case 2:
+                            showCVMenu();
+                            break;
+                        case 3:
+                            showJobMenu();
+                            break;
+                        case 4:
+                            System.out.println("Good bye!!");
+                            System.exit(0);
+                        default:
+                            System.out.println("Choose a number from 1-4");
+                    }
+                }catch (NumberFormatException e){
+                    System.out.println("Invalid number! Choose a number from 1-4");
+
+                }
             }
-            switch (answer){
-                case 1:
-                    processAddCandidate();
-                    break;
-                case 2:
-                    deactivateCandidate();
-                    break;
-                case 3:
-                    processAddCV();
-                    break;
-                case 4:
-                    showList();
-                    break;
-                case 5:
-                    showCVList();
-                    break;
-                case 6:
-                    processAddJobPosition();
-                    break;
-                case 7:
-                    findCandidate();
-                    break;
-                case 8:
-                    System.out.println("Under construction");
-                    break;
-                case 9:
-                    System.out.println("Good bye!!");
-                    System.exit(0);
-                default:
-                    System.out.println("Choose a number from 1-9");
-            }
+
+    }
+
+    public void showCandidateMenu(){
+        System.out.println("---WELCOME TO CANDIDATE SERVICES---");
+        System.out.println("1. Add a candidate\n" +
+                "2. Deactivate candidate\n" +
+                "3. Update candidate information\n"+
+                "4. Show candidates list\n" +
+                "5. Find candidate\n"+
+                "6. Exit\n");
+        sc.nextLine();
+        System.out.println("<-------------------------------->");
+        System.out.println("Choose a number from 1-6:");
+        String answer = sc.nextLine();
+        switch (answer){
+            case "1":
+                processAddCandidate();
+                break;
+            case "2":
+                deactivateCandidate();
+                break;
+            case "3":
+                updateCandidate();
+                break;
+            case "4":
+                showList();
+                break;
+            case "5":
+                findCandidate();
+                break;
+            case "6":
+                showMenu();
+                break;
+            default:
+                System.out.println("Choose a number from 1-6");
         }
+
+    }
+    public void showCVMenu(){
+        System.out.println("---WELCOME TO CV SERVICES---");
+        System.out.println("1. Add a CV\n" +
+                "2. Delete a CV\n" +
+                "3. Show CVs list\n" +
+                "4. Exit\n");
+        System.out.println("<---------------------------->");
+        System.out.println("Choose a number from 1-4:");
+        sc.nextLine();
+        String answer = sc.nextLine();
+        switch (answer){
+            case "1":
+                processAddCV();
+                break;
+            case "2":
+                break;
+            case "3":
+                showCVList();
+                break;
+            case "4":
+                showMenu();
+                break;
+            default:
+                System.out.println("Choose a number from 1-4:");
+        }
+
+    }
+    public void showJobMenu(){
+        System.out.println("---WELCOME TO JOB SERVICES---");
+        System.out.println("1. Add a job\n" +
+                "2. Delete a Job\n" +
+                "3. Show Jobs list\n" +
+                "4. Exit\n");
+        System.out.println("<----------------------------->");
+        System.out.println("Choose a number from 1-4:");
+        sc.nextLine();
+        String answer = sc.nextLine();
+
+        switch (answer){
+            case "1":
+                processAddJobPosition();
+                break;
+            case "2":
+                break;
+            case "3":
+                break;
+            case "4":
+                showMenu();
+            default:
+                System.out.println("Choose a number from 1-4");
+        }
+
     }
     private static void processAddCandidate(){
         System.out.println("--- ADD NEW CANDIDATE ---");
         try {
             System.out.print("Enter ID: ");
-            sc.nextLine();
+
             String id = sc.nextLine();
 
             System.out.print("Enter Full Name: ");
@@ -163,6 +239,66 @@ public class Main {
 
 
     }
+    private static void updateCandidate(){
+        System.out.println("Type in the candidate id:");
+        String candidateId= sc.nextLine();
+        boolean existed = candidateRepository.findById(candidateId).isPresent();
+        if(!existed){
+            throw new CandidateNotFoundException("Your candidate is not existed");
+        }
+        System.out.println("Change infomation of :");
+        System.out.print("1. Full Name\n"+
+                "2. Email\n"+
+                "3. Year of Experience\n"+
+                "4. Candidate's Status\n");
+
+        System.out.println("<--------------------------->");
+        System.out.println("Choose a number from 1-4:");
+        String answer = sc.nextLine();
+        Optional<Candidate> candidate = candidateRepository.findById(candidateId);
+
+        switch (answer){
+            case "1":
+                System.out.println("Type in the new name:");
+                String newname= sc.nextLine();
+                candidate.get().setFullName(newname);
+                System.out.println("Successfully changed!!");
+                break;
+            case "2":
+                System.out.println("Type in the new email:");
+                String newemail= sc.nextLine();
+                candidate.get().setEmail(newemail);
+                System.out.println("Successfully changed!!");
+                break;
+            case "3":
+                System.out.println("Type in the new value of YOE:");
+                int newyoe= sc.nextInt();
+                candidate.get().setYearsOfExperience(newyoe);
+                System.out.println("Successfully changed!!");
+                break;
+            case "4":
+                System.out.println("Type in the new status");
+                System.out.print("1. ACTIVE\n"+
+                        "2. INACTIVE\n");
+                int ans = sc.nextInt();
+                switch (ans){
+                    case 1:
+                        candidate.get().setStatus(CandidateStatus.ACTIVE);
+                        System.out.println("Successfully changed!!");
+                        break;
+                    case 2:
+                        candidate.get().setStatus(CandidateStatus.INACTIVE);
+                        System.out.println("Successfully changed!!");
+                        break;
+                    default:
+                        System.out.println("Choose a number 1/2");
+                }
+
+                break;
+            default:
+                System.out.println("Choose a number from 1-4");
+        }
+    }
     private static void showCVList(){
         System.out.println("---THE LISTS OF CV---");
         List<CV> cvs = cvRespository.findAll();
@@ -178,9 +314,21 @@ public class Main {
     }
 
     private static void processAddCV(){
-        System.out.println("Enter CV ID:");
-        sc.nextLine();
-        String cvId = sc.nextLine();
+        String cvId;
+
+        while (true){
+            System.out.println("Enter CV ID:");
+            sc.nextLine();
+            cvId = sc.nextLine();
+            boolean isExisted = cvRespository.findById(cvId).isPresent();
+            if(!isExisted){
+                break;
+            }else {
+                System.out.println("This CV id is already taken! Try again");
+            }
+
+        }
+
         String candidateId;
 
         while(true){
@@ -283,9 +431,10 @@ public class Main {
             String answer=sc.nextLine();
             switch (answer){
                 case "1":
-                    System.out.println("Type in candidate's name:");
+                    System.out.println("Type in candidate's full name:");
                     String candidateName=sc.nextLine();
-                    candidateService.searchByName(candidateName);
+                    List<Candidate>candidates=candidateService.searchByName(candidateName);
+                    candidates.forEach(c-> System.out.println(c));
                     completed=true;
                     break;
                 case "2":

@@ -4,6 +4,7 @@ import org.project.cvmanagement.common.CommonConstant;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.enums.CVStatus;
 import org.project.cvmanagement.exception.BusinessException;
+import org.project.cvmanagement.exception.CVNotFoundException;
 import org.project.cvmanagement.repository.CVRespository;
 import org.project.cvmanagement.service.CVService;
 import org.project.cvmanagement.domain.CV;
@@ -37,6 +38,19 @@ public class CVServiceImpl implements CVService {
     public CV getById(String cvId) {
         return null;
     }
+
+    @Override
+    public void deleteCV(String cvId){
+        boolean existed = cvRespository.findById(cvId).isPresent();
+        if (!existed){
+            throw new CVNotFoundException(cvId);
+        }else {
+            cvRespository.deleteById(cvId);
+            System.out.println("Successfully deleted !!!");
+        }
+
+    };
+
 
     @Override
     public void submitCV(String cvId){}

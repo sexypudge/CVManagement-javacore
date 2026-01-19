@@ -16,8 +16,12 @@ import org.project.cvmanagement.service.impl.CandidateServiceImpl;
 import org.project.cvmanagement.repository.impl.CVRepositoryImpl;
 import org.project.cvmanagement.service.impl.JobServiceImpl;
 import org.project.cvmanagement.domain.Job;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Main {
     Scanner sc = new Scanner(System.in);
@@ -50,6 +54,7 @@ public class Main {
             System.out.println("6: show all cv of candidate");
             System.out.println("7;  update cv of candidate");
             System.out.println("8: add job position ");
+            System.out.println("9: update job position ");
             System.out.println("Please enter your choice : ");
 
             String choice = sc.nextLine();
@@ -78,6 +83,9 @@ public class Main {
                     break;
                 case "8":
                     handleAddJob();
+                    break;
+                case "9":
+                    handleUpdateJob();
                     break;
             }
         }
@@ -253,6 +261,35 @@ public class Main {
             jobService.addJob(job);
 
             System.out.println("Job Position created successfull.");
+
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void handleUpdateJob() {
+        try {
+            System.out.println("====== Update Job Requirement ======");
+            System.out.print("enter job id to update: ");
+            String id = sc.nextLine();
+
+            jobService.getById(id);
+
+            System.out.print("new title: ");
+            String title = sc.nextLine();
+
+            System.out.print("New level (1:INTERN, 2:FRESHER, 3:JUNIOR, 4:MIDDLE, 5:SENIOR): ");
+            int lv = Integer.parseInt(sc.nextLine());
+            Level level = Level.values()[lv - 1];
+
+            System.out.print("new skill: ");
+            Set<String> skills = Arrays.stream(sc.nextLine().split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .collect(Collectors.toSet());
+
+            jobService.updateJob(id, title, level, skills);
+            System.out.println("iupdate successful");
 
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());

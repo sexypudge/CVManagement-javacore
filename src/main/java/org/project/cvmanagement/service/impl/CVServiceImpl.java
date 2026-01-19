@@ -19,7 +19,6 @@ public class CVServiceImpl implements CVService {
     public final CVRepository cvRepository;
     private final CandidateRepository candidateRepository;
 
-    // Cập nhật Constructor để nhận cả 2 repository
     public CVServiceImpl(CVRepository cvRepository, CandidateRepository candidateRepository) {
         this.cvRepository = cvRepository;
         this.candidateRepository = candidateRepository;
@@ -49,6 +48,7 @@ public class CVServiceImpl implements CVService {
         cvRepository.save(cv);
         System.out.println("Successfully create cv.");
     }
+    @Override
     public void updateCV(CV cv){
         if (cv == null) {
             throw new BusinessException(CommonConstant.NOT_NULL_CV_ERROR_MESSAGE);
@@ -56,9 +56,15 @@ public class CVServiceImpl implements CVService {
         if (CommonUtil.isBlank(cv.getId())) {
             throw new BusinessException(CommonConstant.REQUIRED_CV_ERROR_MESSAGE);
         }
+        CV existingCV = cvRepository.findById(cv.getId()).orElseThrow(() -> new BusinessException("CV not found to update."));
         if (cv.getStatus() != CVStatus.DRAFT) {
             throw new BusinessException("Update cv only in DRAFT status");
         }
+
+        cv.setSkills(existingCV.getSkills());
+        cv.setStatus(existingCV.getStatus());
+
+        cvRepository.save(existingCV);
     }
 
 

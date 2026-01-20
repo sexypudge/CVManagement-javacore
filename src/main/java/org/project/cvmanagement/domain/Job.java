@@ -25,6 +25,8 @@ public class Job {
     public String getId(){
         return id;
     }
+    public Level getRequiredLevel(){return requiredLevel;}
+    public Set<String> getRequiredSkills(){return requiredSkills;}
 
     @Override
     public String toString() {

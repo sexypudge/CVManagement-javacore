@@ -7,18 +7,22 @@ import org.project.cvmanagement.exception.*;
 import org.project.cvmanagement.repository.CVRespository;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.repository.JobRepository;
+import org.project.cvmanagement.repository.SubmissionRepository;
 import org.project.cvmanagement.repository.impl.CVRespositoryImpl;
 import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
 import org.project.cvmanagement.repository.impl.JobRepositoryImpl;
+import org.project.cvmanagement.repository.impl.SubmissionRepositoryImpl;
 import org.project.cvmanagement.service.CVService;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.service.JobService;
+import org.project.cvmanagement.service.SubmissionService;
 import org.project.cvmanagement.service.impl.CVServiceImpl;
 import org.project.cvmanagement.service.impl.CandidateServiceImpl;
 import org.project.cvmanagement.domain.CV;
 import org.project.cvmanagement.enums.CVStatus;
 import org.project.cvmanagement.domain.Job;
 import org.project.cvmanagement.service.impl.JobServiceImpl;
+import org.project.cvmanagement.service.impl.SubmissionServiceImpl;
 
 
 import javax.security.auth.DestroyFailedException;
@@ -37,6 +41,8 @@ public class Main {
     private static CVService cvService = new CVServiceImpl(cvRespository);
     private static JobRepository jobRepository=new JobRepositoryImpl();
     private static JobService jobService = new JobServiceImpl(jobRepository);
+    private static SubmissionRepository submissionRepository =new SubmissionRepositoryImpl();
+    private static SubmissionService submissionService = new SubmissionServiceImpl(submissionRepository);
 
 
 
@@ -136,9 +142,10 @@ public class Main {
                 "2. Delete a CV\n" +
                 "3. Show CVs list\n" +
                 "4. Update CVs\n"+
-                "5. Exit\n");
+                "5. Submits CV\n"+
+                "6. Exit\n");
         System.out.println("<---------------------------->");
-        System.out.println("Choose a number from 1-5:");
+        System.out.println("Choose a number from 1-6:");
         sc.nextLine();
         String answer = sc.nextLine();
         switch (answer){
@@ -154,11 +161,14 @@ public class Main {
             case "4":
                 updateCVs();
                 break;
-            case "5":
+            case  "5":
+                submitCV();
+                break;
+            case "6":
                 showMenu();
                 break;
             default:
-                System.out.println("Choose a number from 1-5:");
+                System.out.println("Choose a number from 1-6:");
         }
 
     }
@@ -168,9 +178,10 @@ public class Main {
                 "2. Delete a Job\n" +
                 "3. Show Jobs list\n" +
                 "4. Update requirements\n"+
-                "5. Exit\n");
+                "5. Pending CVs\n"+
+                "6. Exit\n");
         System.out.println("<----------------------------->");
-        System.out.println("Choose a number from 1-5:");
+        System.out.println("Choose a number from 1-6:");
         sc.nextLine();
         String answer = sc.nextLine();
 
@@ -188,10 +199,13 @@ public class Main {
                 updateJob();
                 break;
             case "5":
+
+                break;
+            case "6":
                 showMenu();
                 break;
             default:
-                System.out.println("Choose a number from 1-4");
+                System.out.println("Choose a number from 1-6");
         }
 
     }
@@ -412,6 +426,8 @@ public class Main {
         System.out.println("-----------------------------");
         System.out.println("CV Created Successfully:");
         System.out.println(newcv.toString());
+
+
     }
     private static void processAddJobPosition(){
         System.out.println("Enter job id: ");
@@ -492,7 +508,7 @@ public class Main {
     private static void updateCVs(){
         System.out.println("Type in your CV's id :");
         String cvId = sc.nextLine();
-        boolean existed = candidateRepository.findById(cvId).isPresent();
+        boolean existed = cvRespository.findById(cvId).isPresent();
         if(!existed){
             throw new CVNotFoundException("Your cv is not existed!!");
         }
@@ -634,6 +650,41 @@ public class Main {
                 System.out.println("Successfully updated!!!");
                 break;
         }
+
+    }
+    private static void submitCV(){
+        System.out.println("Type in your CV's id: ");
+        String cvId = sc.nextLine();
+        if (!cvRespository.findById(cvId).isPresent()){
+            throw new CVNotFoundException(cvId);
+        }
+        Optional<CV> cv = cvRespository.findById(cvId);
+        System.out.println("This is your CV's information:");
+        System.out.println(cv.get());
+        System.out.println("<---------------------------------->");
+        List<Job> job = jobRepository.findAll();
+        List<Job> finalFiltered = new ArrayList<>();
+        List<Job> filterJobs = job.stream()
+                .filter(j -> j.getRequiredLevel().equals(cv.get().getLevel()))
+                .collect(Collectors.toList());
+        if(filterJobs!=null){
+            finalFiltered = filterJobs.stream()
+                    .filter(j -> j.getRequiredSkills().stream()
+                            .anyMatch(skill -> cv.get().getSkills().contains(skill)))
+                    .collect(Collectors.toList());
+        }
+
+        System.out.println("Here are CVs that matches your skills and Level:");
+        System.out.println(finalFiltered);
+        System.out.println("<------------------------------------------------->");
+        System.out.println("Type in here Job's id to submit: ");
+        String jobId = sc.nextLine();
+        if(!jobRepository.findById(jobId).isPresent()){
+            throw new JobNotFoundException(jobId);
+        }
+        cv.get().setStatus(CVStatus.SUBMITTED);
+        submissionRepository.save(cvId,jobId);
+        System.out.println("Successfully submitted!!!");
 
     }
 

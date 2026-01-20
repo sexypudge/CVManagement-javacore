@@ -6,16 +6,20 @@ import org.project.cvmanagement.enums.Level;
 import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.repository.JobRepository;
+import org.project.cvmanagement.repository.SubmissionRepository;
 import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
 import org.project.cvmanagement.repository.impl.JobRepositoryImpl;
+import org.project.cvmanagement.repository.impl.SubmissionRepositoryImpl;
 import org.project.cvmanagement.service.CVService;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.service.JobService;
+import org.project.cvmanagement.service.SubmissionService;
 import org.project.cvmanagement.service.impl.CVServiceImpl;
 import org.project.cvmanagement.service.impl.CandidateServiceImpl;
 import org.project.cvmanagement.repository.impl.CVRepositoryImpl;
 import org.project.cvmanagement.service.impl.JobServiceImpl;
 import org.project.cvmanagement.domain.Job;
+import org.project.cvmanagement.service.impl.SubmissionServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,12 +31,14 @@ public class Main {
     Scanner sc = new Scanner(System.in);
 
     static CandidateRepository candidateRepo = new CandidateRepositoryImpl();
-    static CandidateService candidateService = new CandidateServiceImpl(candidateRepo);
     static CVRepository cvRepo = new CVRepositoryImpl();
-    static CVService cvService = new CVServiceImpl(cvRepo, candidateRepo);
     static JobRepository jobRepo = new JobRepositoryImpl();
-    static JobService jobService = new JobServiceImpl(jobRepo);
+    static SubmissionRepository submissionRepo = new SubmissionRepositoryImpl();
 
+    static CandidateService candidateService = new CandidateServiceImpl(candidateRepo);
+    static CVService cvService = new CVServiceImpl(cvRepo, candidateRepo);
+    static JobService jobService = new JobServiceImpl(jobRepo, submissionRepo);
+    static SubmissionService submissionService = new SubmissionServiceImpl(cvRepo, jobRepo, submissionRepo);
     public static void main(String[] args) {
         Main main = new Main();
         main.showMenu();
@@ -42,6 +48,7 @@ public class Main {
         // 3. read input
         // 4. call service
     }
+
     // menu
     public void showMenu() {
         while (true) {
@@ -90,6 +97,7 @@ public class Main {
             }
         }
     }
+
     // add new candidate
     private void handleAddCandidate() {
         try {
@@ -112,6 +120,7 @@ public class Main {
             System.err.println("Error: " + e.getMessage());
         }
     }
+
     //deactive status candidate
     private void handleDeactivateCandidate() {
         try {
@@ -149,6 +158,7 @@ public class Main {
             System.err.println("error: " + e.getMessage());
         }
     }
+
     // search by name candidate
     private void handleSearchByname() {
         try {
@@ -175,6 +185,7 @@ public class Main {
         }
 
     }
+
     // create cv
     private void handleCreateCV() {
         try {
@@ -191,9 +202,8 @@ public class Main {
 
             System.out.println("Select Level (1: INTERN, 2: FRESHER, 3: JUNIOR, 4: MIDDLE, 5: SENIOR): ");
             int levelChoice = Integer.parseInt(sc.nextLine());
-            org.project.cvmanagement.enums.Level level = org.project.cvmanagement.enums.Level.values()[levelChoice - 1];
-
-            org.project.cvmanagement.domain.CV cv = new org.project.cvmanagement.domain.CV(cvId, candidateId, skills, level, null);
+            Level level = Level.values()[levelChoice - 1]; //
+            CV cv = new CV(cvId, candidateId, skills, level, null); //rut gon bằng cách import đầu file.
             cvService.createCV(cv);
 
             System.out.println("CV created in DRAFT status.");
@@ -201,6 +211,7 @@ public class Main {
             System.err.println("Error: " + e.getMessage());
         }
     }
+
     //list cv of candidate
     private void handleViewCVsByCandidate() {
         System.out.print("Enter candidate ID to view the list of cv: ");
@@ -220,6 +231,7 @@ public class Main {
             });
         }
     }
+
     // update cv.
     private void handleUpdateCV() {
         System.out.print("Enter cv ID needs update: ");
@@ -292,7 +304,8 @@ public class Main {
             System.out.println("iupdate successful");
 
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            System.err.println("error: " + e.getMessage());
         }
     }
+
 }

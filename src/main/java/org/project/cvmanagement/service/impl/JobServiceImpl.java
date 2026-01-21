@@ -1,5 +1,6 @@
 package org.project.cvmanagement.service.impl;
 
+import org.project.cvmanagement.domain.CVSubmission;
 import org.project.cvmanagement.domain.Job;
 import org.project.cvmanagement.enums.Level;
 import org.project.cvmanagement.exception.BusinessException;
@@ -46,7 +47,16 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void deleteJob(String jobId) {
+        getById(jobId);
 
+        List<CVSubmission> allSubmissions = submissionRepo.findAll();
+        for (CVSubmission sub : allSubmissions) {
+            if (sub.getJobPositionId().equals(jobId)) {
+                throw new BusinessException("job cannot be deleted because there are already apply");
+            }
+        }
+        jobRepository.deleteById(jobId);
+        System.out.println("delete successful");
     }
 
     @Override

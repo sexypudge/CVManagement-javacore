@@ -10,4 +10,5 @@ public interface CVService {
     void submitCV(String cvId);
 
     CV getById(String cvId);
+    void updateCV(CV cv);
 }

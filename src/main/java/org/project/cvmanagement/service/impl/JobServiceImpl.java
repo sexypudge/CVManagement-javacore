@@ -4,15 +4,18 @@ import org.project.cvmanagement.domain.Job;
 import org.project.cvmanagement.enums.Level;
 import org.project.cvmanagement.exception.BusinessException;
 import org.project.cvmanagement.repository.JobRepository;
+import org.project.cvmanagement.repository.SubmissionRepository;
 import org.project.cvmanagement.service.JobService;
 import java.util.List;
 import java.util.Set;
 
 public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
+    private final SubmissionRepository submissionRepo;
 
-    public JobServiceImpl(JobRepository jobRepository) {
+    public JobServiceImpl(JobRepository jobRepository, SubmissionRepository submissionRepo) {
         this.jobRepository = jobRepository;
+        this.submissionRepo = submissionRepo;
     }
 
     @Override

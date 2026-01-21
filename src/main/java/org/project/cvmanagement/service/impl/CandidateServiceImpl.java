@@ -22,7 +22,7 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public void addCandidate(Candidate candidate) {
-        // Validate input
+        // validate input
         if (candidate == null) {
             throw new BusinessException(CommonConstant.NOT_NULL_CANDIDATE_ERROR_MESSAGE);
         }
@@ -58,6 +58,7 @@ public class CandidateServiceImpl implements CandidateService {
     public void updateCandidate(Candidate candidate) {
         if (candidate == null || CommonUtil.isBlank(candidate.getId())) {
             throw new BusinessException("Invalid candidate data");
+
         }
 
         Candidate existed = candidateRepository.findById(candidate.getId()).orElseThrow(() -> new RuntimeException("Candidate not found"));
@@ -72,23 +73,20 @@ public class CandidateServiceImpl implements CandidateService {
 
         candidateRepository.save(existed);
 
-        System.out.println("Update successful: " + candidate.getId());
+        System.out.println("update successful: " + candidate.getId());
     }
 
     @Override
     public void deactivateCandidate(String candidateId) {
-
 
         Candidate candidate = candidateRepository.findById(candidateId).orElseThrow(() -> new RuntimeException("Candidate not found"));
 
         candidate.setStatus(CandidateStatus.INACTIVE);
         candidateRepository.save(candidate);
 
-        System.out.println("Deactivated candidate with candidateId: " + candidateId);
-
+        System.out.println("deactivated candidate with candidateId: " + candidateId);
 
     }
-
 
     @Override
     public Candidate getById(String candidateId) {

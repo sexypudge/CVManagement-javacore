@@ -11,9 +11,11 @@ import org.project.cvmanagement.util.CommonUtil;
 
 public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
+
     public JobServiceImpl(JobRepository jobRepository){
         this.jobRepository=jobRepository;
     }
+    @Override
     public void addJob(Job job){
         if (job == null) {
             throw new BusinessException(CommonConstant.NOT_NULL_JOB_ERROR_MESSAGE);
@@ -28,8 +30,10 @@ public class JobServiceImpl implements JobService {
         System.out.println("Successfully created CV: "+job.getId());
 
     }
+    @Override
     public Job getById(String jobId){
         return null;
     }
+
 
 }

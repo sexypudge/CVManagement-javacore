@@ -94,5 +94,12 @@ public class CandidateServiceImpl implements CandidateService {
     }
     @Override
     public List<Candidate> getAllCandidate(){return candidateRepository.findAll();}
+    @Override
+    public List<Candidate> searchByStatus(){
+
+        List<Candidate> candidate = candidateRepository.findAll();
+        return candidate.stream()
+                .filter(c->c.getStatus().equals(CandidateStatus.ACTIVE)).collect(Collectors.toList());
+    }
 
 }

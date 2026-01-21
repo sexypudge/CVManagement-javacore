@@ -17,9 +17,16 @@ public class Job {
         this.requiredLevel=requiredLevel;
         this.requiredSkills=requiredSkills;
     }
+    public void setTitle(String newTitle){this.title=newTitle;}
+    public void setLevel(Level level){this.requiredLevel=level;}
+    public void setRequiredLevel(Set<String> skills){
+        this.requiredSkills=skills;
+    }
     public String getId(){
         return id;
     }
+    public Level getRequiredLevel(){return requiredLevel;}
+    public Set<String> getRequiredSkills(){return requiredSkills;}
 
     @Override
     public String toString() {

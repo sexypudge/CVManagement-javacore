@@ -1,9 +1,13 @@
 package org.project.cvmanagement.service;
 
 
+import org.project.cvmanagement.domain.CV;
+import org.project.cvmanagement.domain.CVSubmission;
+import org.project.cvmanagement.domain.Job;
+
 public interface SubmissionService {
 
-    void applyCV(String cvId, String jobId);
+    void applyCV(CVSubmission cvSubmission);
 
-    void evaluateCV(String cvId, String jobId, double score);
+
 }

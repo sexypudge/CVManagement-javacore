@@ -2,6 +2,7 @@ package org.project.cvmanagement.service;
 
 
 public interface SubmissionService {
+    void submitCV(String cvId);
 
     void applyCV(String cvId, String jobId);
 

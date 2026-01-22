@@ -16,7 +16,19 @@ public class SubmissionServiceImpl implements SubmissionService {
         this.jobRepo = jobRepo;
         this.submissionRepo = submissionRepo;
     }
+    @Override
+    public void submitCV(String cvId) {
+        CV cv = cvRepo.findById(cvId)
+                .orElseThrow(() -> new BusinessException("cv does not exit"));
 
+        if (cv.getStatus() == CVStatus.SUBMITTED) {
+            throw new BusinessException("this cv was submitted previously..");
+        }
+        cv.setStatus(CVStatus.SUBMITTED);
+        cvRepo.save(cv);
+
+        System.out.println(" cv " + cvId + " submit sucessful .you can apply for job");
+    }
     @Override
     public void applyCV(String cvId, String jobId) {
         CV cv = cvRepo.findById(cvId).orElseThrow(() -> new BusinessException("cv does not exist."));

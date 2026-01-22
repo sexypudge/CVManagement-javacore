@@ -62,6 +62,9 @@ public class Main {
             System.out.println("7;  update cv of candidate");
             System.out.println("8: add job position ");
             System.out.println("9: update job position ");
+            System.out.println("10: Delete job position");
+            System.out.println("11: submit cv ");
+            System.out.println("12: Apply cv to job pition");
             System.out.println("Please enter your choice : ");
 
             String choice = sc.nextLine();
@@ -93,6 +96,15 @@ public class Main {
                     break;
                 case "9":
                     handleUpdateJob();
+                    break;
+                case "10":
+                    handleDeleteJob();
+                    break;
+                case"11":
+                    handleSubmitCV();
+                    break;
+                case "12":
+                    handleApplyCV();
                     break;
             }
         }
@@ -307,5 +319,40 @@ public class Main {
             System.err.println("error: " + e.getMessage());
         }
     }
+    private void handleDeleteJob() {
+        try {
+            System.out.println("delete job position:");
+            System.out.print("Enter job id to delete: ");
+            String jobId = sc.nextLine();
 
+            jobService.deleteJob(jobId);
+        } catch (Exception e) {
+            System.err.println("error: " + e.getMessage());
+        }
+    }
+    private void handleSubmitCV() {
+        try {
+            System.out.println(" SUBMIT CV ");
+            System.out.print("enter cv to submit: ");
+            String cvId = sc.nextLine();
+
+            cvService.submitCV(cvId);
+        } catch (Exception e) {
+            System.err.println("error: " + e.getMessage());
+        }
+    }
+    private void handleApplyCV() {
+        try {
+            System.out.println(" apply cv to job position ");
+            System.out.print("Enter CV ID: ");
+            String cvId = sc.nextLine();
+
+            System.out.print("Enter Job ID: ");
+            String jobId = sc.nextLine();
+            submissionService.applyCV(cvId, jobId);
+
+        } catch (Exception e) {
+            System.err.println("error: " + e.getMessage());
+        }
+    }
 }

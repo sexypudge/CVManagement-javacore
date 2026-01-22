@@ -1,6 +1,7 @@
 package org.project.cvmanagement;
 
 import org.project.cvmanagement.domain.CV;
+import org.project.cvmanagement.domain.CVSubmission;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.domain.Job;
 import org.project.cvmanagement.enums.Level;
@@ -17,8 +18,6 @@ import org.project.cvmanagement.service.impl.CVServiceImpl;
 import org.project.cvmanagement.service.impl.CandidateServiceImpl;
 import org.project.cvmanagement.service.impl.JobServiceImpl;
 
-import javax.sound.midi.Soundbank;
-import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -29,7 +28,7 @@ public class Main {
     static CVRepository cvRepository = new CVRepositoryImpl();
     static CVService cvService = new CVServiceImpl(cvRepository, candidateRepository);
     static JobRepository jobRepository = new JobRepositoryImpl();
-    static JobService jobService = new JobServiceImpl(jobRepository);
+    static JobService jobService = new JobServiceImpl(jobRepository, cvRepository);
 
     public static void main(String[] args) {
         while (true) {
@@ -90,6 +89,7 @@ public class Main {
             System.out.println("1. Create new cv");
             System.out.println("2. Update cv");
             System.out.println("3. Submit cv");
+            System.out.println("4. Delete cv");
             System.out.println("0. Back");
 
             int choice = scanner.nextInt();
@@ -102,6 +102,8 @@ public class Main {
                     handleUpdateCV();
                 case 3:
                     handleSubmitCV();
+                case 4:
+                    handleDeleteCV();
                 case 0:
                     return;
             }
@@ -113,6 +115,7 @@ public class Main {
             System.out.println("Job menu.");
             System.out.println("1. Add job");
             System.out.println("2. Update job");
+            System.out.println("3. Delete job");
             System.out.println("0. Exit");
 
             int choice = scanner.nextInt();
@@ -122,6 +125,8 @@ public class Main {
                     handleAddJob();
                 case 2:
                     handleUpdateJob();
+                case 3:
+                    handleDeleteJob();
                 case 0:
                     return;
             }
@@ -246,6 +251,19 @@ public class Main {
             System.err.println("Error: " + e.getMessage());
         }
     }
+    private static void handleDeleteCV() {
+        try {
+            System.out.println("Delete cv.");
+            System.out.println("Enter id: ");
+            String id = scanner.nextLine();
+
+            cvService.deleteCV(id);
+            System.out.println("CV Deleted.");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
 
     private static void handleAddJob() {
         try {
@@ -306,6 +324,20 @@ public class Main {
 
             jobService.updateJob(job);
             System.out.println("Job updated.");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+    private static void handleDeleteJob(){
+        try {
+            System.out.println("Delete job");
+            System.out.println("Enter job id:");
+            String jobId = scanner.nextLine();
+            System.out.println("Enter job id:");
+            String cvId = scanner.nextLine();
+
+            jobService.deleteJob(cvId,jobId);
+            System.out.println("JOb deleted");
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }

@@ -2,16 +2,13 @@ package org.project.cvmanagement.service.impl;
 
 import org.project.cvmanagement.common.CommonConstant;
 import org.project.cvmanagement.domain.CV;
-import org.project.cvmanagement.domain.CVSubmission;
-import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.domain.Job;
 import org.project.cvmanagement.enums.CVStatus;
-import org.project.cvmanagement.enums.CandidateStatus;
 import org.project.cvmanagement.enums.Level;
 import org.project.cvmanagement.exception.BusinessException;
-import org.project.cvmanagement.exception.DuplicateCandidateException;
 import org.project.cvmanagement.exception.DuplicateJobException;
 import org.project.cvmanagement.repository.JobRepository;
+import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.service.JobService;
 import org.project.cvmanagement.util.CommonUtil;
 
@@ -20,8 +17,11 @@ import java.util.Optional;
 public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
 
-    public JobServiceImpl(JobRepository jobRepository) {
+    public final CVRepository cvRepository;
+
+    public JobServiceImpl(JobRepository jobRepository, CVRepository cvRepository) {
         this.jobRepository = jobRepository;
+        this.cvRepository = cvRepository;
     }
 
     //thêm addJob
@@ -75,6 +75,20 @@ public class JobServiceImpl implements JobService {
         }
         jobRepository.save(job);
         System.out.println("Successfully updated job: " + job.getId());
+    }
+
+    @Override
+    public void deleteJob(String jobId, String cvId) {
+        if (CommonUtil.isBlank(jobId)) {
+            throw new BusinessException(CommonConstant.REQUIRED_JOB_ERROR_MESSAGE);
+        }
+        jobRepository.findById(jobId).orElseThrow(() -> new BusinessException("Job not found"));
+        Optional<CV> cvOptional = cvRepository.findById(cvId);
+        CV cv = cvOptional.get();
+        if (cv.getStatus() == CVStatus.SUBMITTED) {
+            throw new BusinessException("CV applied job. Fail to delete. ");
+        }
+        jobRepository.deleteById(jobId);
     }
 
     @Override

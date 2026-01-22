@@ -27,8 +27,13 @@ public class CVRepositoryImpl implements CVRepository {
     }
 
     @Override
-    public void deleteById(String s) {
-
+    public void deleteById(String id) {
+        if(storage.containsKey(id)){
+            storage.remove(id);
+            System.out.println("CV has been removed");
+        }else {
+            System.err.println("CV not found");
+        }
     }
     @Override
     public List<Candidate> findByFullName(String fullName) {

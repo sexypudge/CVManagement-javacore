@@ -11,4 +11,5 @@ public interface CVService {
 
     CV getById(String cvId);
     void updateCV(CV cv);
+    void deleteCV(String id);
 }

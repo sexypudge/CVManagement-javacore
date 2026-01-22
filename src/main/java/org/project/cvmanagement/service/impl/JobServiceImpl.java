@@ -2,8 +2,10 @@ package org.project.cvmanagement.service.impl;
 
 import org.project.cvmanagement.common.CommonConstant;
 import org.project.cvmanagement.domain.CV;
+import org.project.cvmanagement.domain.CVSubmission;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.domain.Job;
+import org.project.cvmanagement.enums.CVStatus;
 import org.project.cvmanagement.enums.CandidateStatus;
 import org.project.cvmanagement.enums.Level;
 import org.project.cvmanagement.exception.BusinessException;

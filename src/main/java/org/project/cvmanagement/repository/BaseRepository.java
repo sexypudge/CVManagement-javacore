@@ -1,6 +1,7 @@
 package org.project.cvmanagement.repository;
 
 
+import org.project.cvmanagement.domain.CV;
 import org.project.cvmanagement.domain.Candidate;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface BaseRepository<T, ID> {
     List<T> findAll();
     void deleteById(ID id);
     List<Candidate> findByFullName(String fullName);
+    public List<CV> findByCandidateId(String candidateId);
 }

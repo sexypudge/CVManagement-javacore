@@ -13,6 +13,7 @@ import org.project.cvmanagement.service.SubmissionService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class SubmissionServiceImpl implements SubmissionService {
@@ -33,27 +34,36 @@ public class SubmissionServiceImpl implements SubmissionService {
         }
         CV cv = cvRepository.findById(cvId).orElseThrow(() -> new BusinessException("CV not found"));
         Job job = jobRepository.findById(jobId).orElseThrow(() -> new BusinessException("job not found"));
+
         if (cv.getStatus() != CVStatus.SUBMITTED) {
             throw new BusinessException("DRAFT CV can not apply Job");
         }
 
-        double score = scoreSubmission(cv, job);
-
-        evaluateCV(cvId, jobId, score);
+        cv.setStatus(CVStatus.SUBMITTED);
+        cvRepository.save(cv);
+        matchingSubmission(cv, job);
     }
 
-    private double scoreSubmission(CV cv, Job job) {
-        double score = 0;
+    private void matchingSubmission(CV cv, Job job) {
+
         if (cv.getLevel() == job.getRequiredLevel()) {
-            score += 5;
+            System.out.println("Level matched!");
         }
         Set<String> jobSkills = job.getRequiredSkills();
         List<String> cvSkills = cv.getSkills();
         if (jobSkills != null && !jobSkills.isEmpty()) {
-            double match = jobSkills.stream().filter(jSkill -> cvSkills.stream().anyMatch(cSkill -> cSkill.equalsIgnoreCase(jSkill))).count();
-            score += match / jobSkills.size() * 5;
+            double matchRate = 0;
+            long match = jobSkills.stream().filter(jSkill -> cvSkills.stream().anyMatch(cSkill -> cSkill.equalsIgnoreCase(jSkill))).count();
+            matchRate += (double) match / jobSkills.size() * 100;
+
+            System.out.println("Skills match: " + matchRate + "%");
         }
-        return score;
+
+        CVSubmission submission = new CVSubmission(cv.getId(), job.getId(),null,null);
+        submission.setCvId(cv.getId());
+        submission.setJobPositionId(job.getId());
+
+        submissionRepository.save(submission);
     }
 
     @Override
@@ -65,8 +75,10 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         if (score >= 5) {
             submission.setResult(Result.PASS);
+            System.out.println("Pass to apply job");
         } else {
             submission.setResult(Result.FAIL);
+            System.out.println("Fail to apply job");
         }
         submissionRepository.save(submission);
     }

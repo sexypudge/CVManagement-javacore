@@ -17,6 +17,12 @@ public class CVSubmission {
         this.score = score;
         this.result = result;
     }
+    public CVSubmission(String cvId, String jobPositionId, Double score, Result result) {
+        this.cvId = cvId;
+        this.jobPositionId = jobPositionId;
+        this.score = score;
+        this.result = result;
+    }
     public CVSubmission(String cvId, String jobPositionId, double score) {
 
     }

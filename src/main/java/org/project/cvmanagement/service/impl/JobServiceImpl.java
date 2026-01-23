@@ -73,7 +73,7 @@ public class JobServiceImpl implements JobService {
         if (job.getRequiredSkills() != null) {
             jobExisting.setRequiredSkills(job.getRequiredSkills());
         }
-        jobRepository.save(job);
+        jobRepository.save(jobExisting);
         System.out.println("Successfully updated job: " + job.getId());
     }
 
@@ -85,7 +85,7 @@ public class JobServiceImpl implements JobService {
         jobRepository.findById(jobId).orElseThrow(() -> new BusinessException("Job not found"));
         Optional<CV> cvOptional = cvRepository.findById(cvId);
         CV cv = cvOptional.get();
-        if (cv.getStatus() == CVStatus.SUBMITTED) {
+        if (cv.getStatus() != CVStatus.DRAFT && cv.getId() != null) {
             throw new BusinessException("CV applied job. Fail to delete. ");
         }
         jobRepository.deleteById(jobId);

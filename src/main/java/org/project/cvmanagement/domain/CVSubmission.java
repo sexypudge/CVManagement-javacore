@@ -27,6 +27,12 @@ public class CVSubmission {
     public void setResult(Result result){
         this.result=result;
     }
+    public double getScore(){
+        return score;
+    }
+    public Result getResult(){
+        return result;
+    }
     @Override
     public String toString(){
         return "CV's ID: "+cvId+", Job's ID: "+jobPostionId+", Score: "+score+", Result: "+result;

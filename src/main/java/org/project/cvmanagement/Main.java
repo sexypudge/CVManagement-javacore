@@ -106,10 +106,11 @@ public class Main {
                 "4. Show candidates list\n" +
                 "5. Find candidate\n"+
                 "6. List ACTIVE Candidates\n"+
-                "7. Exit\n");
+                "7. Candidate reports\n"+
+                "8. Exit\n");
         sc.nextLine();
         System.out.println("<-------------------------------->");
-        System.out.println("Choose a number from 1-7:");
+        System.out.println("Choose a number from 1-8:");
         String answer = sc.nextLine();
         switch (answer){
             case "1":
@@ -131,10 +132,13 @@ public class Main {
                 listACTIVECandidate();
                 break;
             case "7":
+                candidateReport();
+                break;
+            case "8":
                 showMenu();
                 break;
             default:
-                System.out.println("Choose a number from 1-7");
+                System.out.println("Choose a number from 1-8");
         }
 
     }
@@ -744,7 +748,9 @@ public class Main {
 
         Optional <List<CVSubmission>> job = submissionRepository.findById(cvId);
         List<String> jobIds = job.get().stream()
+                .filter(k->k.getResult()==Result.PENDING)
                 .map(CVSubmission::getJobPostionId)
+
                 .collect(Collectors.toList());
         System.out.println(jobIds);
 
@@ -754,6 +760,7 @@ public class Main {
             throw new JobNotFoundException("This job's id doesn't exist in applied CV!!");
         }
         Optional<Job> jobDetails = jobRepository.findById(jobRequest);
+        System.out.println(jobDetails.get().toString());
         System.out.println("The level of CV is:"+cvinfo.get().getLevel());
         System.out.println("The skills that matches with Job's details are:");
         List<String> skillmatches = jobDetails.get().getRequiredSkills().stream().filter(skill-> cvinfo.get().getSkills().contains(skill)).collect(Collectors.toList());
@@ -776,6 +783,24 @@ public class Main {
         System.out.println("<---------------------------------->");
         System.out.println("Here is the result:");
         System.out.println(cvSubmission.get().toString());
+
+    }
+    private static void candidateReport(){
+        System.out.println("Type in candidate's id:");
+        String candidateId = sc.nextLine();
+        List<CV> cv = cvRespository.findAll().stream().filter(cdId->cdId.getCandidateId().equals(candidateId)).collect(Collectors.toList());
+        if(cv==null){
+            throw new CVNotFoundException("This candidate doesn't have cv yet!");
+        }
+        System.out.println("Candidate ID: "+candidateId);
+        cv.forEach(cvid->{
+            System.out.println("CV: "+cvid.getId()+" ("+cvid.getStatus()+")");
+            Optional<List<CVSubmission>> cvSubmissions = submissionRepository.findById(cvid.getId());
+            cvSubmissions.get().forEach(cvResult->{
+                System.out.println("-"+cvResult.getJobPostionId()+": "+"("+cvResult.getScore()+") "+cvResult.getResult());
+            });
+        });
+
 
     }
 

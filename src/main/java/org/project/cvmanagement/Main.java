@@ -35,7 +35,8 @@ public class Main {
     static JobRepository jobRepo = new JobRepositoryImpl();
     static SubmissionRepository submissionRepo = new SubmissionRepositoryImpl();
 
-    static CandidateService candidateService = new CandidateServiceImpl(candidateRepo);
+
+    static CandidateService candidateService = new CandidateServiceImpl(candidateRepo, cvRepo, jobRepo, submissionRepo);
     static CVService cvService = new CVServiceImpl(cvRepo, candidateRepo);
     static JobService jobService = new JobServiceImpl(jobRepo, submissionRepo);
     static SubmissionService submissionService = new SubmissionServiceImpl(cvRepo, jobRepo, submissionRepo);
@@ -43,11 +44,7 @@ public class Main {
     public static void main(String[] args) {
         Main main = new Main();
         main.showMenu();
-        // TODO:
-        // 1. init services
-        // 2. show menu
-        // 3. read input
-        // 4. call service
+
     }
 
     // menu
@@ -67,6 +64,7 @@ public class Main {
             System.out.println("11: submit cv ");
             System.out.println("12: Apply cv to job pition");
             System.out.println("13: Evaluate cv");
+            System.out.println("14: show candidate's report");
             System.out.println("Please enter your choice : ");
 
             String choice = sc.nextLine();
@@ -110,6 +108,9 @@ public class Main {
                     break;
                 case "13":
                     handleEvaluateCV();
+                    break;
+                case "14":
+                    handleShowReport();
                     break;
             }
         }
@@ -366,6 +367,7 @@ public class Main {
 
     private void handleEvaluateCV() {
         try {
+
             System.out.println(" EVALUATE CV ");
             System.out.print("enter ID CV: ");
             String cvId = sc.nextLine();
@@ -375,6 +377,18 @@ public class Main {
             double score = Double.parseDouble(sc.nextLine());
 
             submissionService.evaluateCV(cvId, jobId, score);
+        } catch (Exception e) {
+            System.err.println("error: " + e.getMessage());
+        }
+    }
+
+    private void handleShowReport() {
+        try {
+            System.out.println(" CANDIDATE REPORT ");
+            System.out.print("Enter candidate id: ");
+            String candidateId = sc.nextLine();
+
+            candidateService.showCandidateReport(candidateId);
         } catch (Exception e) {
             System.err.println("error: " + e.getMessage());
         }

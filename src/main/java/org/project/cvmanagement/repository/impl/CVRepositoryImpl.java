@@ -5,6 +5,7 @@ import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.repository.CVRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class CVRepositoryImpl implements CVRepository {
@@ -27,12 +28,22 @@ public class CVRepositoryImpl implements CVRepository {
     }
 
     @Override
-    public void deleteById(String s) {
-
+    public void deleteById(String id) {
+        if (storage.containsKey(id)) {
+            storage.remove(id);
+            System.out.println("CV has been removed");
+        } else {
+            System.err.println("CV not found");
+        }
     }
+
     @Override
     public List<Candidate> findByFullName(String fullName) {
         return null;
     }
 
+    @Override
+    public List<CV> findByCandidateId(String candidateId) {
+        return storage.values().stream().filter(cv -> candidateId.equals(cv.getCandidateId())).collect(Collectors.toList());
+    }
 }

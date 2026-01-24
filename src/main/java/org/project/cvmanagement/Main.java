@@ -7,35 +7,42 @@ import org.project.cvmanagement.enums.Level;
 import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.repository.JobRepository;
+import org.project.cvmanagement.repository.SubmissionRepository;
 import org.project.cvmanagement.repository.impl.CVRepositoryImpl;
 import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
 import org.project.cvmanagement.repository.impl.JobRepositoryImpl;
 import org.project.cvmanagement.service.CVService;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.service.JobService;
+import org.project.cvmanagement.service.SubmissionService;
 import org.project.cvmanagement.service.impl.CVServiceImpl;
 import org.project.cvmanagement.service.impl.CandidateServiceImpl;
 import org.project.cvmanagement.service.impl.JobServiceImpl;
+import org.project.cvmanagement.service.impl.SubmissionServiceImpl;
 
-import javax.sound.midi.Soundbank;
-import java.lang.reflect.Array;
 import java.util.*;
 
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
     static CandidateRepository candidateRepository = new CandidateRepositoryImpl();
-    static CandidateService candidateService = new CandidateServiceImpl(candidateRepository);
     static CVRepository cvRepository = new CVRepositoryImpl();
-    static CVService cvService = new CVServiceImpl(cvRepository, candidateRepository);
     static JobRepository jobRepository = new JobRepositoryImpl();
-    static JobService jobService = new JobServiceImpl(jobRepository);
+
+    static SubmissionRepository submissionRepository = new SubmissionRepository();
+    static CandidateService candidateService = new CandidateServiceImpl(candidateRepository, cvRepository, jobRepository, submissionRepository);
+    static CVService cvService = new CVServiceImpl(cvRepository, candidateRepository);
+    static JobService jobService = new JobServiceImpl(jobRepository, cvRepository);
+    static SubmissionService submissionService = new SubmissionServiceImpl(submissionRepository,jobRepository, cvRepository);
 
     public static void main(String[] args) {
         while (true) {
             System.out.println("Main menu");
             System.out.println("1. Candidate Service");
             System.out.println("2. CV Service");
+            System.out.println("3. Job Service");
+            System.out.println("4. Submission");
+            System.out.println("5. Show candidate report");
             System.out.println("0. Exit");
 
             int choice = scanner.nextInt();
@@ -47,10 +54,14 @@ public class Main {
                     showCVService(scanner);
                 case 3:
                     showJobService(scanner);
+                case 4:
+                    showSubmission(scanner);
+                case 5:
+                    showCandidateReport(scanner);
                 case 0:
                     return;
                 default:
-                    System.out.println("Invaid input.");
+                    System.out.println("Invalid input.");
             }
         }
         // TODO:
@@ -80,6 +91,8 @@ public class Main {
                     handleDeactivateCandidate();
                 case 0:
                     return;
+                default:
+                    System.out.println("Invalid input");
             }
         }
     }
@@ -90,6 +103,7 @@ public class Main {
             System.out.println("1. Create new cv");
             System.out.println("2. Update cv");
             System.out.println("3. Submit cv");
+            System.out.println("4. Delete cv");
             System.out.println("0. Back");
 
             int choice = scanner.nextInt();
@@ -102,8 +116,12 @@ public class Main {
                     handleUpdateCV();
                 case 3:
                     handleSubmitCV();
+                case 4:
+                    handleDeleteCV();
                 case 0:
                     return;
+                default:
+                    System.out.println("Invalid input");
             }
         }
     }
@@ -113,7 +131,8 @@ public class Main {
             System.out.println("Job menu.");
             System.out.println("1. Add job");
             System.out.println("2. Update job");
-            System.out.println("0. Exit");
+            System.out.println("3. Delete job");
+            System.out.println("0. Back");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -122,9 +141,46 @@ public class Main {
                     handleAddJob();
                 case 2:
                     handleUpdateJob();
+                case 3:
+                    handleDeleteJob();
                 case 0:
                     return;
+                default:
+                    System.out.println("Invalid input");
             }
+        }
+    }
+
+    public static void showSubmission(Scanner scanner) {
+        while (true) {
+            System.out.println("Submission");
+            System.out.println("Apply CV");
+            System.out.println("Evaluate CV");
+            System.out.println("0. Back");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice) {
+                case 1:
+                    handleApplyCV();
+                case 2:
+                    handleEvaluateCV();
+                case 0:
+                    return;
+                default:
+                    System.out.println("Invalid input");
+            }
+        }
+    }
+    public static void showCandidateReport(Scanner scanner){
+        System.out.println("Show candidate report");
+        try {
+            System.out.println("Enter id:");
+            String id = scanner.nextLine();
+
+            candidateService.showCandidateReport(id);
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
         }
     }
 
@@ -217,7 +273,7 @@ public class Main {
                 System.out.println(i + "." + levels[i]);
             }
             int choice = Integer.parseInt(scanner.nextLine());
-            if (choice >= 1 || choice <= levels.length) {
+            if (choice >= 1 && choice <= levels.length) {
                 System.out.println(levels[choice - 1]);
             }
             String skills = scanner.nextLine();
@@ -247,6 +303,20 @@ public class Main {
         }
     }
 
+    private static void handleDeleteCV() {
+        try {
+            System.out.println("Delete cv.");
+            System.out.println("Enter id: ");
+            String id = scanner.nextLine();
+
+            cvService.deleteCV(id);
+            System.out.println("CV Deleted.");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+
     private static void handleAddJob() {
         try {
             System.out.println("Add job.");
@@ -266,7 +336,7 @@ public class Main {
                 System.out.println(i + "." + reqLevels[i]);
             }
             int choice = Integer.parseInt(scanner.nextLine());
-            if (choice >= 1 || choice <= reqLevels.length) {
+            if (choice >= 1 && choice <= reqLevels.length) {
                 System.out.println(reqLevels[choice - 1]);
             }
             Level selectedLevel = reqLevels[choice - 1];
@@ -298,7 +368,7 @@ public class Main {
                 System.out.println(i + "." + reqLevels[i]);
             }
             int choice = Integer.parseInt(scanner.nextLine());
-            if (choice >= 1 || choice <= reqLevels.length) {
+            if (choice >= 1 && choice <= reqLevels.length) {
                 System.out.println(reqLevels[choice - 1]);
             }
             Level selectedLevel = reqLevels[choice - 1];
@@ -306,6 +376,51 @@ public class Main {
 
             jobService.updateJob(job);
             System.out.println("Job updated.");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void handleDeleteJob() {
+        try {
+            System.out.println("Delete job");
+            System.out.println("Enter job id:");
+            String jobId = scanner.nextLine();
+
+            jobService.deleteJob(null, jobId);
+            System.out.println("Job deleted");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void handleApplyCV() {
+        try {
+            System.out.println("Submission");
+            System.out.println("Enter job id: ");
+            String jobId = scanner.nextLine();
+            System.out.println("Enter cv id: ");
+            String cvId = scanner.nextLine();
+
+            submissionService.applyCV(jobId,cvId);
+            System.out.println("CV applied");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void handleEvaluateCV() {
+        try {
+            System.out.println("Evaluate cv");
+            System.out.println("Enter job id: ");
+            String jobId = scanner.nextLine();
+            System.out.println("Enter cv id: ");
+            String cvId = scanner.nextLine();
+            System.out.println("Enter cv id: ");
+            double score = scanner.nextDouble();
+
+            submissionService.evaluateCV(cvId,jobId,score);
+            System.out.println("Evaluated");
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }

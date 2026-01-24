@@ -1,9 +1,12 @@
 package org.project.cvmanagement.repository.impl;
 
+import org.project.cvmanagement.domain.CV;
+import org.project.cvmanagement.domain.CVSubmission;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.repository.CandidateRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CandidateRepositoryImpl implements CandidateRepository {
 
@@ -38,5 +41,10 @@ public class CandidateRepositoryImpl implements CandidateRepository {
             }
         }
         return nameList;
+    }
+
+    @Override
+    public List<CV> findByCandidateId(String candidateId) {
+        return null;
     }
 }

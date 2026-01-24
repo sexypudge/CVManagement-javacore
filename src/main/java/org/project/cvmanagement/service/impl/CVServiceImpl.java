@@ -23,6 +23,7 @@ public class CVServiceImpl implements CVService {
         this.cvRepository = cvRepository;
         this.candidateRepository = candidateRepository;
     }
+
     @Override
     public void createCV(CV cv) {
         if (cv == null) {
@@ -31,8 +32,8 @@ public class CVServiceImpl implements CVService {
         if (CommonUtil.isBlank(cv.getId())) {
             throw new BusinessException(CommonConstant.REQUIRED_CV_ERROR_MESSAGE);
         }
-        Candidate candidate = candidateRepository.findById(cv.getCandidateId()).orElseThrow(()-> new CandidateNotFoundException(cv.getCandidateId()));
-        if (CandidateStatus.INACTIVE.equals(candidate.getStatus())){
+        Candidate candidate = candidateRepository.findById(cv.getCandidateId()).orElseThrow(() -> new CandidateNotFoundException(cv.getCandidateId()));
+        if (CandidateStatus.INACTIVE.equals(candidate.getStatus())) {
             throw new BusinessException("INACTIVE candidate. Activate candidate to create cv.");
         }
         System.out.println("Create new cv with cvId " + cv.getId());
@@ -48,8 +49,9 @@ public class CVServiceImpl implements CVService {
         cvRepository.save(cv);
         System.out.println("Successfully create cv.");
     }
+
     @Override
-    public void updateCV(CV cv){
+    public void updateCV(CV cv) {
         if (cv == null) {
             throw new BusinessException(CommonConstant.NOT_NULL_CV_ERROR_MESSAGE);
         }
@@ -82,6 +84,17 @@ public class CVServiceImpl implements CVService {
         cvRepository.save(cv);
     }
 
+    @Override
+    public void deleteCV(String id) {
+        if (CommonUtil.isBlank(id)) {
+            throw new BusinessException(CommonConstant.REQUIRED_CV_ERROR_MESSAGE);
+        }
+        CV cv = cvRepository.findById(id).orElseThrow(() -> new BusinessException("CV not found to delete."));
+        if(cv.getStatus() == CVStatus.APPROVED || cv.getStatus()== CVStatus.REJECTED){
+            throw new BusinessException("CV are not allow to delete(APPROVED or REJECTED");
+        }
+        cvRepository.deleteById(id);
+    }
 
     @Override
     public CV getById(String cvId) {

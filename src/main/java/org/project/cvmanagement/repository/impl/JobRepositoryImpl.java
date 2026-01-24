@@ -26,11 +26,22 @@ public class JobRepositoryImpl implements JobRepository {
     }
 
     @Override
-    public void deleteById(String s) {
-
+    public void deleteById(String jobId) {
+        if (storage.containsKey(jobId)) {
+            storage.remove(jobId);
+            System.out.println("Job has been removed");
+        } else {
+            System.err.println("Job not found");
+        }
     }
+
     @Override
     public List<Candidate> findByFullName(String fullName) {
+        return null;
+    }
+
+    @Override
+    public List<CV> findByCandidateId(String candidateId) {
         return null;
     }
 }

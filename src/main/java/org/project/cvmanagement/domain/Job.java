@@ -17,6 +17,10 @@ public class Job {
         this.requiredLevel = requiredLevel;
         this.requiredSkills = requiredSkills;
     }
+    public Job(String cvId, String jobPositionId, double score){
+
+    }
+
     public String getId() {
         return id;
     }

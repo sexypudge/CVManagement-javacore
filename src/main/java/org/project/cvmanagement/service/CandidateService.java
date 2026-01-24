@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CandidateService {
 
+
     void addCandidate(Candidate candidate);
 
     void updateCandidate(Candidate candidate);
@@ -16,5 +17,7 @@ public interface CandidateService {
     Candidate getById(String candidateId);
 
     List<Candidate> searchByName(String keyword);
+
+    void showCandidateReport(String candidateId);
 }
 

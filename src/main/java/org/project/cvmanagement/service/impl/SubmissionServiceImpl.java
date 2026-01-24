@@ -16,6 +16,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         this.jobRepo = jobRepo;
         this.submissionRepo = submissionRepo;
     }
+
     @Override
     public void submitCV(String cvId) {
         CV cv = cvRepo.findById(cvId)
@@ -29,6 +30,7 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         System.out.println(" cv " + cvId + " submit sucessful .you can apply for job");
     }
+
     @Override
     public void applyCV(String cvId, String jobId) {
         CV cv = cvRepo.findById(cvId).orElseThrow(() -> new BusinessException("cv does not exist."));
@@ -51,5 +53,34 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Override
     public void evaluateCV(String cvId, String jobId, double score) {
+        if (score < 0 || score > 10) {
+            throw new BusinessException("The rating must be between 0 and 10");
+        }
+
+        CVSubmission submission = submissionRepo.findAll().stream()
+                .filter(s -> s.getCvId().equals(cvId) && s.getJobPositionId().equals(jobId))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException("This application was not found"));
+
+        // kt trạng thái cv
+        CV cv = cvRepo.findById(cvId).orElseThrow(() -> new BusinessException("cv does not exit"));
+        if (cv.getStatus() == CVStatus.APPROVED || cv.getStatus() == CVStatus.REJECTED) {
+            throw new BusinessException("This cv has already received its score, it cannot edit");
+        }
+
+        submission.setScore(score);
+        if (score >= 5.0) {
+            submission.setResult(Result.PASS);
+            cv.setStatus(CVStatus.APPROVED);
+        } else {
+            submission.setResult(Result.FAIL);
+            cv.setStatus(CVStatus.REJECTED);
+        }
+
+        submissionRepo.save(submission);
+        cvRepo.save(cv);
+
+        System.out.println("evaluation successful,results: " + submission.getResult());
+
     }
 }

@@ -18,5 +18,6 @@ public interface CandidateService {
 
     List<Candidate> searchByName(String keyword);
 
+    void showCandidateReport(String candidateId);
 }
 

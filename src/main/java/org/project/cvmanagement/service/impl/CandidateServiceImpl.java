@@ -93,6 +93,7 @@ public class CandidateServiceImpl implements CandidateService {
             }
             existingCandidate.setFullName(candidate.getFullName());
             existingCandidate.setEmail(candidate.getEmail());
+            existingCandidate.setYearsOfExperience(candidate.getYearsOfExperience());
             candidateRepository.save(existingCandidate);
             System.out.println("Updating candidate successfully." + candidate.getId());
         } else {

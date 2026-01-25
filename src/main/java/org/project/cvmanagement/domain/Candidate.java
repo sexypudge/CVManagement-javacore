@@ -12,6 +12,7 @@ public class Candidate {
     private String id;
     private String fullName;
     private String email;
+
     private int yearsOfExperience;
     private CandidateStatus status;
 
@@ -51,6 +52,9 @@ public class Candidate {
 
     public int getYearsOfExperience() {
         return yearsOfExperience;
+    }
+    public void setYearsOfExperience(int yearsOfExperience) {
+        this.yearsOfExperience = yearsOfExperience;
     }
 
     public CandidateStatus getStatus() {

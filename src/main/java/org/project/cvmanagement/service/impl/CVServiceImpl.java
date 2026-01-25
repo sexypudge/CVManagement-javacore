@@ -48,6 +48,7 @@ public class CVServiceImpl implements CVService {
 
         cvRepository.save(cv);
         System.out.println("Successfully create cv.");
+        System.out.println();
     }
 
     @Override
@@ -55,19 +56,20 @@ public class CVServiceImpl implements CVService {
         if (cv == null) {
             throw new BusinessException(CommonConstant.NOT_NULL_CV_ERROR_MESSAGE);
         }
-        if (CommonUtil.isBlank(cv.getId())) {
-            throw new BusinessException(CommonConstant.REQUIRED_CV_ERROR_MESSAGE);
-        }
-        CV existingCV = cvRepository.findById(cv.getId()).orElseThrow(() -> new BusinessException("CV not found to update."));
-        if (cv.getStatus() != CVStatus.DRAFT) {
+
+        CV existingCV = cvRepository.findById(cv.getId())
+                .orElseThrow(() -> new BusinessException("CV not found to update."));
+
+        if (existingCV.getStatus() != CVStatus.DRAFT) {
             throw new BusinessException("Update cv only in DRAFT status");
         }
-
-        cv.setSkills(existingCV.getSkills());
-        cv.setStatus(existingCV.getStatus());
+        existingCV.setSkills(cv.getSkills());
+        existingCV.setLevel(cv.getLevel());
 
         cvRepository.save(existingCV);
+        System.out.println("CV updated in repository: " + existingCV.getId());
     }
+
 
 
     @Override

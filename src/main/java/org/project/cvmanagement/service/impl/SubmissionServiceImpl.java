@@ -45,8 +45,9 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     private void matchingSubmission(CV cv, Job job) {
-
+        double autoScore = 0;
         if (cv.getLevel() == job.getRequiredLevel()) {
+            autoScore +=5;
             System.out.println("Level matched!");
         }
         Set<String> jobSkills = job.getRequiredSkills();
@@ -55,14 +56,15 @@ public class SubmissionServiceImpl implements SubmissionService {
             double matchRate = 0;
             long match = jobSkills.stream().filter(jSkill -> cvSkills.stream().anyMatch(cSkill -> cSkill.equalsIgnoreCase(jSkill))).count();
             matchRate += (double) match / jobSkills.size() * 100;
-
+            autoScore += (double) match / jobSkills.size() * 5;
             System.out.println("Skills match: " + matchRate + "%");
         }
 
-        CVSubmission submission = new CVSubmission(cv.getId(), job.getId(),null,null);
+        CVSubmission submission = new CVSubmission(cv.getId(), job.getId(),autoScore,null);
         submission.setCvId(cv.getId());
         submission.setJobPositionId(job.getId());
-
+        submission.setScore(autoScore);
+        submission.setResult(Result.PENDING);
         submissionRepository.save(submission);
     }
 

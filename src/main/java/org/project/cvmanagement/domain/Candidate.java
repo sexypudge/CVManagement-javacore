@@ -12,6 +12,7 @@ public class Candidate {
     private String id;
     private String fullName;
     private String email;
+
     private int yearsOfExperience;
     private CandidateStatus status;
 
@@ -37,12 +38,23 @@ public class Candidate {
         return fullName;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public int getYearsOfExperience() {
         return yearsOfExperience;
+    }
+    public void setYearsOfExperience(int yearsOfExperience) {
+        this.yearsOfExperience = yearsOfExperience;
     }
 
     public CandidateStatus getStatus() {

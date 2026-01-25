@@ -16,5 +16,6 @@ public interface CandidateService {
     Candidate getById(String candidateId);
 
     List<Candidate> searchByName(String keyword);
+    void showCandidateReport(String candidateId);
 }
 

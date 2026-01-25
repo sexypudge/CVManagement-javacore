@@ -4,12 +4,17 @@ import org.project.cvmanagement.common.CommonConstant;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.enums.CandidateStatus;
 import org.project.cvmanagement.exception.BusinessException;
+import org.project.cvmanagement.exception.CandidateNotFoundException;
 import org.project.cvmanagement.exception.DuplicateCandidateException;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.util.CommonUtil;
 
+import java.util.Optional;
+import java.util.regex.Pattern;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CandidateServiceImpl implements CandidateService {
 
@@ -30,6 +35,16 @@ public class CandidateServiceImpl implements CandidateService {
             throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
         }
         // TODO: validate name, email
+        if (candidate.getFullName()==null||candidate.getFullName().length()<2){
+            throw new BusinessException("The name field can not be null and no less than 2 characters");
+        }
+        if (candidate.getFullName().matches(".*\\d.*")){
+            throw new BusinessException("The name can not contain digits");
+        }
+        boolean validSyntax = candidate.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        if(!validSyntax){
+            throw new BusinessException("Email is invalid, example: user@example.com");
+        }
 
         System.out.println("Adding candidate with candidateId: " + candidate.getId());
         // Check duplicate
@@ -54,16 +69,37 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public void deactivateCandidate(String candidateId) {
+        boolean existed = candidateRepository.findById(candidateId).isPresent();
+        if(!existed){
+            throw new CandidateNotFoundException("Your candidate is not existed");
 
+        }else{
+            candidateRepository.deleteById(candidateId);
+            System.out.println("Successfully deleted candidate with candidateId: " + candidateId);
+        }
     }
 
     @Override
     public Candidate getById(String candidateId) {
-        return null;
+        Optional<Candidate> candidate=candidateRepository.findById(candidateId);
+        return candidate.get();
     }
 
     @Override
     public List<Candidate> searchByName(String keyword) {
-        return List.of();
+        List<Candidate>candidate=candidateRepository.findAll();
+        return candidate.stream()
+                .filter(c-> c.getFullName().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
+
     }
+    @Override
+    public List<Candidate> getAllCandidate(){return candidateRepository.findAll();}
+    @Override
+    public List<Candidate> searchByStatus(){
+
+        List<Candidate> candidate = candidateRepository.findAll();
+        return candidate.stream()
+                .filter(c->c.getStatus().equals(CandidateStatus.ACTIVE)).collect(Collectors.toList());
+    }
+
 }

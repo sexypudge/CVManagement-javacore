@@ -38,11 +38,6 @@ public class CVRepositoryImpl implements CVRepository {
     }
 
     @Override
-    public List<Candidate> findByFullName(String fullName) {
-        return null;
-    }
-
-    @Override
     public List<CV> findByCandidateId(String candidateId) {
         return storage.values().stream().filter(cv -> candidateId.equals(cv.getCandidateId())).collect(Collectors.toList());
     }

@@ -4,8 +4,6 @@ import org.project.cvmanagement.enums.Result;
 
 public class CVSubmission {
 
-    // TODO: fields
-    // cvId, jobPositionId, score, result
     private String cvId;
     private String jobPositionId;
     private double score;

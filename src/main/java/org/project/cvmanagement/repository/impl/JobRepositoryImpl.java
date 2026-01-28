@@ -35,13 +35,4 @@ public class JobRepositoryImpl implements JobRepository {
         }
     }
 
-    @Override
-    public List<Candidate> findByFullName(String fullName) {
-        return null;
-    }
-
-    @Override
-    public List<CV> findByCandidateId(String candidateId) {
-        return null;
-    }
 }

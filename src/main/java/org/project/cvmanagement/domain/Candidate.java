@@ -3,11 +3,6 @@ package org.project.cvmanagement.domain;
 import org.project.cvmanagement.enums.CandidateStatus;
 
 public class Candidate {
-    // TODO: fields
-    // id, fullName, email, yearsOfExperience, status
-
-    // TODO: constructor
-    // TODO: getters/setters
 
     private String id;
     private String fullName;

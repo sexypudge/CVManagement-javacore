@@ -12,6 +12,4 @@ public interface BaseRepository<T, ID> {
     Optional<T> findById(ID id);
     List<T> findAll();
     void deleteById(ID id);
-    List<Candidate> findByFullName(String fullName);
-    public List<CV> findByCandidateId(String candidateId);
 }

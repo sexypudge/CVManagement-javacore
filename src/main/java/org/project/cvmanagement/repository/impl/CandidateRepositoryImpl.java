@@ -43,8 +43,4 @@ public class CandidateRepositoryImpl implements CandidateRepository {
         return nameList;
     }
 
-    @Override
-    public List<CV> findByCandidateId(String candidateId) {
-        return null;
-    }
 }

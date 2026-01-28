@@ -8,20 +8,18 @@ import org.project.cvmanagement.enums.Result;
 import org.project.cvmanagement.exception.BusinessException;
 import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.repository.JobRepository;
-import org.project.cvmanagement.repository.SubmissionRepository;
+import org.project.cvmanagement.repository.impl.SubmissionRepositoryImpl;
 import org.project.cvmanagement.service.SubmissionService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class SubmissionServiceImpl implements SubmissionService {
-    private final SubmissionRepository submissionRepository;
+    private final SubmissionRepositoryImpl submissionRepository;
     private final JobRepository jobRepository;
     private final CVRepository cvRepository;
 
-    public SubmissionServiceImpl(SubmissionRepository submissionRepository, JobRepository jobRepository, CVRepository cvRepository) {
+    public SubmissionServiceImpl(SubmissionRepositoryImpl submissionRepository, JobRepository jobRepository, CVRepository cvRepository) {
         this.submissionRepository = submissionRepository;
         this.jobRepository = jobRepository;
         this.cvRepository = cvRepository;
@@ -39,7 +37,6 @@ public class SubmissionServiceImpl implements SubmissionService {
             throw new BusinessException("DRAFT CV can not apply Job");
         }
 
-        cv.setStatus(CVStatus.SUBMITTED);
         cvRepository.save(cv);
         matchingSubmission(cv, job);
     }
@@ -75,11 +72,21 @@ public class SubmissionServiceImpl implements SubmissionService {
         submission.setJobPositionId(jobId);
         submission.setScore(score);
 
+        CV cv = cvRepository.findById(cvId).orElseThrow(() -> new BusinessException("CV not found"));
+
+        if (cv.getStatus() == CVStatus.APPROVED || cv.getStatus() == CVStatus.REJECTED) {
+            throw new BusinessException("This cv has already received status, it cannot edit");
+        }
+        if (score < 0 || score > 10) {
+            throw new BusinessException("The rating must be between 0 and 10");
+        }
         if (score >= 5) {
             submission.setResult(Result.PASS);
+            cv.setStatus(CVStatus.APPROVED);
             System.out.println("Pass to apply job");
         } else {
             submission.setResult(Result.FAIL);
+            cv.setStatus(CVStatus.REJECTED);
             System.out.println("Fail to apply job");
         }
         submissionRepository.save(submission);

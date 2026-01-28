@@ -13,11 +13,10 @@ import org.project.cvmanagement.exception.DuplicateCandidateException;
 import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.repository.JobRepository;
-import org.project.cvmanagement.repository.SubmissionRepository;
+import org.project.cvmanagement.repository.impl.SubmissionRepositoryImpl;
 import org.project.cvmanagement.service.CandidateService;
 import org.project.cvmanagement.util.CommonUtil;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,9 +25,9 @@ public class CandidateServiceImpl implements CandidateService {
     private final CandidateRepository candidateRepository;
     private final CVRepository cvRepository;
     private final JobRepository jobRepository;
-    private final SubmissionRepository submissionRepository;
+    private final SubmissionRepositoryImpl submissionRepository;
 
-    public CandidateServiceImpl(CandidateRepository candidateRepository, CVRepository cvRepository, JobRepository jobRepository, SubmissionRepository submissionRepository) {
+    public CandidateServiceImpl(CandidateRepository candidateRepository, CVRepository cvRepository, JobRepository jobRepository, SubmissionRepositoryImpl submissionRepository) {
         this.candidateRepository = candidateRepository;
         this.cvRepository = cvRepository;
         this.jobRepository = jobRepository;

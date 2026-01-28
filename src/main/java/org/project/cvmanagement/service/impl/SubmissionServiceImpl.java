@@ -8,20 +8,18 @@ import org.project.cvmanagement.enums.Result;
 import org.project.cvmanagement.exception.BusinessException;
 import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.repository.JobRepository;
-import org.project.cvmanagement.repository.SubmissionRepository;
+import org.project.cvmanagement.repository.impl.SubmissionRepositoryImpl;
 import org.project.cvmanagement.service.SubmissionService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class SubmissionServiceImpl implements SubmissionService {
-    private final SubmissionRepository submissionRepository;
+    private final SubmissionRepositoryImpl submissionRepository;
     private final JobRepository jobRepository;
     private final CVRepository cvRepository;
 
-    public SubmissionServiceImpl(SubmissionRepository submissionRepository, JobRepository jobRepository, CVRepository cvRepository) {
+    public SubmissionServiceImpl(SubmissionRepositoryImpl submissionRepository, JobRepository jobRepository, CVRepository cvRepository) {
         this.submissionRepository = submissionRepository;
         this.jobRepository = jobRepository;
         this.cvRepository = cvRepository;

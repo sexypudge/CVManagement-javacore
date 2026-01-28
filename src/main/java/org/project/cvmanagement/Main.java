@@ -7,7 +7,7 @@ import org.project.cvmanagement.enums.Level;
 import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.repository.JobRepository;
-import org.project.cvmanagement.repository.SubmissionRepository;
+import org.project.cvmanagement.repository.impl.SubmissionRepositoryImpl;
 import org.project.cvmanagement.repository.impl.CVRepositoryImpl;
 import org.project.cvmanagement.repository.impl.CandidateRepositoryImpl;
 import org.project.cvmanagement.repository.impl.JobRepositoryImpl;
@@ -29,7 +29,7 @@ public class Main {
     static CVRepository cvRepository = new CVRepositoryImpl();
     static JobRepository jobRepository = new JobRepositoryImpl();
 
-    static SubmissionRepository submissionRepository = new SubmissionRepository();
+    static SubmissionRepositoryImpl submissionRepository = new SubmissionRepositoryImpl();
     static CandidateService candidateService = new CandidateServiceImpl(candidateRepository, cvRepository, jobRepository, submissionRepository);
     static CVService cvService = new CVServiceImpl(cvRepository, candidateRepository);
     static JobService jobService = new JobServiceImpl(jobRepository, cvRepository);

@@ -3,6 +3,7 @@ package org.project.cvmanagement;
 import org.project.cvmanagement.domain.CV;
 import org.project.cvmanagement.domain.Candidate;
 import org.project.cvmanagement.enums.Level;
+import org.project.cvmanagement.exception.BusinessException;
 import org.project.cvmanagement.repository.CVRepository;
 import org.project.cvmanagement.repository.CandidateRepository;
 import org.project.cvmanagement.repository.JobRepository;
@@ -43,75 +44,116 @@ public class Main {
 
     public static void main(String[] args) {
         Main main = new Main();
-        main.showMenu();
+        main.showMainMenu();
 
     }
 
     // menu
-    public void showMenu() {
+    public void showMainMenu() {
         while (true) {
-            System.out.println("======= CV Management system =======");
-            System.out.println("1: Add candidate");
-            System.out.println("2: Deactivate Candidate");
-            System.out.println("3: Update information ");
-            System.out.println("4: Search candidate by name ");
-            System.out.println("5:Create CV for candidate");
-            System.out.println("6: show all cv of candidate");
-            System.out.println("7;  update cv of candidate");
-            System.out.println("8: add job position ");
-            System.out.println("9: update job position ");
-            System.out.println("10: Delete job position");
-            System.out.println("11: submit cv ");
-            System.out.println("12: Apply cv to job pition");
-            System.out.println("13: Evaluate cv");
-            System.out.println("14: show candidate's report");
-            System.out.println("Please enter your choice : ");
+            System.out.println("\n========== CV MANAGEMENT SYSTEM ==========");
+            System.out.println("1. Candidate Management");
+            System.out.println("2. CV Management");
+            System.out.println("3. Job Position & Recruitment");
+            System.out.println("4. Reports & Statistics");
+            System.out.println("0. Exit");
+            System.out.print("Please enter your choice: ");
 
             String choice = sc.nextLine();
-
             switch (choice) {
-                case "1":
-                    handleAddCandidate();
+                case "1": showCandidateMenu(); break;
+                case "2": showCVMenu(); break;
+                case "3": showJobMenu(); break;
+                case "4": showReportMenu(); break;
+                case "0": System.exit(0);
+                default: System.out.println("Invalid choice!");
+            }
+        }
+    }
+
+    private void showCandidateMenu() {
+        while (true) {
+            System.out.println("\n--- CANDIDATE MANAGEMENT ---");
+            System.out.println("1. Add Candidate");
+            System.out.println("2. Update Candidate Information");
+            System.out.println("3. Deactivate Candidate (Soft Delete)");
+            System.out.println("4. Search Candidate by Name");
+            System.out.println("0. Back to Main Menu");
+            System.out.print("Choice: ");
+
+            String choice = sc.nextLine();
+            if (choice.equals("0")) return;
+            switch (choice) {
+                case "1": handleAddCandidate(); break;
+                case "2": handleUpdateCandidate(); break;
+                case "3": handleDeactivateCandidate(); break;
+                case "4": handleSearchByname(); break;
+                default: System.out.println("Invalid choice!");
+            }
+        }
+    }
+
+    private void showCVMenu() {
+        while (true) {
+            System.out.println("\n--- CV MANAGEMENT ---");
+            System.out.println("1. Create CV for Candidate");
+            System.out.println("2. Update CV (Skills/Level)");
+            System.out.println("3. Submit CV (Ready to Apply)");
+            System.out.println("4. View All CVs of a Candidate");
+            System.out.println("0. Back to Main Menu");
+            System.out.print("Choice: ");
+
+            String choice = sc.nextLine();
+            if (choice.equals("0")) return;
+            switch (choice) {
+                case "1": handleCreateCV(); break;
+                case "2": handleUpdateCV(); break;
+                case "3": handleSubmitCV(); break;
+                case "4": handleViewCVsByCandidate(); break;
+                default: System.out.println("Invalid choice!");
+            }
+        }
+    }
+
+    private void showJobMenu() {
+        while (true) {
+            System.out.println("\n--- JOB & RECRUITMENT ---");
+            System.out.println("1. Add Job Position");
+            System.out.println("2. Update Job Requirements");
+            System.out.println("3. Delete Job Position");
+            System.out.println("4. Apply CV to Job");
+            System.out.println("5. Evaluate CV (Score & Result)");
+            System.out.println("0. Back to Main Menu");
+            System.out.print("Choice: ");
+
+            String choice = sc.nextLine();
+            if (choice.equals("0")) return;
+            switch (choice) {
+                case "1": handleAddJob(); break;
+                case "2": handleUpdateJob(); break;
+                case "3": handleDeleteJob(); break;
+                case "4": handleApplyCV(); break;
+                case "5": handleEvaluateCV(); break;
+                default: System.out.println("Invalid choice!");
+            }
+        }
+    }
+
+    private void showReportMenu() {
+        while (true) {
+            System.out.println("\n--- REPORTS & STATISTICS ---");
+            System.out.println("1. Show Individual Candidate Report");
+            System.out.println("2. Show System Statistics (Nice to have)");
+            System.out.println("0. Back to Main Menu");
+            System.out.print("Choice: ");
+
+            String choice = sc.nextLine();
+            if (choice.equals("0")) return;
+            switch (choice) {
+                case "1": handleShowReport(); break;
+                case "2": // handleShowStatistics(); (Mục 5.7)
                     break;
-                case "2":
-                    handleDeactivateCandidate();
-                    break;
-                case "3":
-                    handleUpdateCandidate();
-                    break;
-                case "4":
-                    handleSearchByname();
-                    break;
-                case "5":
-                    handleCreateCV();
-                    break;
-                case "6":
-                    handleViewCVsByCandidate();
-                    break;
-                case "7":
-                    handleUpdateCV();
-                    break;
-                case "8":
-                    handleAddJob();
-                    break;
-                case "9":
-                    handleUpdateJob();
-                    break;
-                case "10":
-                    handleDeleteJob();
-                    break;
-                case "11":
-                    handleSubmitCV();
-                    break;
-                case "12":
-                    handleApplyCV();
-                    break;
-                case "13":
-                    handleEvaluateCV();
-                    break;
-                case "14":
-                    handleShowReport();
-                    break;
+                default: System.out.println("Invalid choice!");
             }
         }
     }
@@ -367,18 +409,27 @@ public class Main {
 
     private void handleEvaluateCV() {
         try {
-
-            System.out.println(" EVALUATE CV ");
-            System.out.print("enter ID CV: ");
+            System.out.println("\n--- EVALUATE CV ---");
+            System.out.print("Enter CV ID: ");
             String cvId = sc.nextLine();
-            System.out.print("enter ID Job: ");
+            System.out.print("Enter Job ID: ");
             String jobId = sc.nextLine();
-            System.out.print("enter score (0-10): ");
+
+            Job job = jobRepo.findById(jobId).orElseThrow(() -> new BusinessException("Job not found"));
+            CV cv = cvRepo.findById(cvId).orElseThrow(() -> new BusinessException("CV not found"));
+
+            System.out.println("\n--- SKILLS COMPARISON ---");
+            System.out.println("Job Required Skills: " + job.getRequiredSkills());
+            System.out.println("Candidate Skills   : " + cv.getSkills());
+            System.out.println("-------------------------");
+
+            System.out.print("Enter score (0-10): ");
             double score = Double.parseDouble(sc.nextLine());
 
             submissionService.evaluateCV(cvId, jobId, score);
+
         } catch (Exception e) {
-            System.err.println("error: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
         }
     }
 

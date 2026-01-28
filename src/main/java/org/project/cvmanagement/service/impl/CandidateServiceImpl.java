@@ -48,7 +48,6 @@ public class CandidateServiceImpl implements CandidateService {
         if (CommonUtil.isBlank(candidate.getEmail())) {
             throw new BusinessException(CommonConstant.REQUIRED_CANDIDATE_ERROR_MESSAGE);
         }
-        // TODO: validate name, email
 
         System.out.println("Adding candidate with candidateId: " + candidate.getId());
         // Check duplicate
@@ -129,7 +128,6 @@ public class CandidateServiceImpl implements CandidateService {
             System.out.println("  (No cv found for this candidate)");
             return;
         }
-
 
         candidateCVs.forEach(cv -> {
             System.out.println("CV: " + cv.getId() + " (" + cv.getStatus() + ")");

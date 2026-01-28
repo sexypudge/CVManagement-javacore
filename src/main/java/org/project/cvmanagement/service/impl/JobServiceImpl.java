@@ -49,6 +49,7 @@ public class JobServiceImpl implements JobService {
         if (job.getRequiredSkills() != null && !job.getRequiredSkills().isEmpty()) {
             job.setRequiredSkills(job.getRequiredSkills());
         }
+
         jobRepository.save(job);
         System.out.println("Successfully added job: " + job.getId());
     }

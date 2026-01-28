@@ -39,7 +39,6 @@ public class SubmissionServiceImpl implements SubmissionService {
             throw new BusinessException("DRAFT CV can not apply Job");
         }
 
-        cv.setStatus(CVStatus.SUBMITTED);
         cvRepository.save(cv);
         matchingSubmission(cv, job);
     }
@@ -75,11 +74,21 @@ public class SubmissionServiceImpl implements SubmissionService {
         submission.setJobPositionId(jobId);
         submission.setScore(score);
 
+        CV cv = cvRepository.findById(cvId).orElseThrow(() -> new BusinessException("CV not found"));
+
+        if (cv.getStatus() == CVStatus.APPROVED || cv.getStatus() == CVStatus.REJECTED) {
+            throw new BusinessException("This cv has already received status, it cannot edit");
+        }
+        if (score < 0 || score > 10) {
+            throw new BusinessException("The rating must be between 0 and 10");
+        }
         if (score >= 5) {
             submission.setResult(Result.PASS);
+            cv.setStatus(CVStatus.APPROVED);
             System.out.println("Pass to apply job");
         } else {
             submission.setResult(Result.FAIL);
+            cv.setStatus(CVStatus.REJECTED);
             System.out.println("Fail to apply job");
         }
         submissionRepository.save(submission);

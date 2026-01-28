@@ -5,8 +5,6 @@ import org.project.cvmanagement.enums.Level;
 import java.util.Set;
 
 public class Job {
-    // TODO: fields
-    // id, title, requiredLevel, requiredSkills
     private String id;
     private String title;
     private Level requiredLevel;
@@ -16,9 +14,6 @@ public class Job {
         this.title = title;
         this.requiredLevel = requiredLevel;
         this.requiredSkills = requiredSkills;
-    }
-    public Job(String cvId, String jobPositionId, double score){
-
     }
 
     public String getId() {

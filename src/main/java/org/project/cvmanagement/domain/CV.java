@@ -6,16 +6,11 @@ import org.project.cvmanagement.enums.Level;
 import java.util.List;
 
 public class CV {
-    // TODO: fields
-    // id, candidateId, skills, level, status
-
-    // TODO: constructor
-    // TODO: getters/setters
     private String id;
     private String candidateId;
-    List<String> skills;
-    public Level level;
-    public CVStatus status;
+    private List<String> skills;
+    private Level level;
+    private CVStatus status;
 
     public CV(String id, String candidateId, List<String> skills, Level level, CVStatus status) {
         this.id = id;

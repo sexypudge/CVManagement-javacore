@@ -3,12 +3,6 @@ package org.project.cvmanagement.domain;
 import org.project.cvmanagement.enums.CandidateStatus;
 
 public class Candidate {
-    // TODO: fields
-    // id, fullName, email, yearsOfExperience, status
-
-    // TODO: constructor
-    // TODO: getters/setters
-
     private String id;
     private String fullName;
     private String email;
@@ -27,8 +21,6 @@ public class Candidate {
         this.status = status;
     }
 
-    // ===== Getters / Setters =====
-
     public String getId() {
         return id;
     }
@@ -37,12 +29,24 @@ public class Candidate {
         return fullName;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public int getYearsOfExperience() {
         return yearsOfExperience;
+    }
+
+    public void setYearsOfExperience(int yearsOfExperience) {
+        this.yearsOfExperience = yearsOfExperience;
     }
 
     public CandidateStatus getStatus() {

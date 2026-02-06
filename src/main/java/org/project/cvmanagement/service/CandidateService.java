@@ -1,6 +1,5 @@
 package org.project.cvmanagement.service;
 
-
 import org.project.cvmanagement.domain.Candidate;
 
 import java.util.List;
@@ -16,5 +15,6 @@ public interface CandidateService {
     Candidate getById(String candidateId);
 
     List<Candidate> searchByName(String keyword);
-}
 
+    List<Candidate> listActiveCandidates();
+}

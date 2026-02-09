@@ -45,9 +45,8 @@ public class CandidateServiceImpl implements CandidateService {
             throw new BusinessException(CommonConstant.CANDIDATE_ID_REQUIRED);
         }
 
-        Candidate existing = getById(candidate.getId()); // throws if not found
+        Candidate existing = getById(candidate.getId());
 
-        // Only update information fields, keep status
         validateCandidateInfo(candidate);
         existing.setFullName(candidate.getFullName());
         existing.setEmail(candidate.getEmail());

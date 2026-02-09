@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class CandidateRepositoryImpl implements CandidateRepository {
 
-    private final Map<String, Candidate> storage = new HashMap<>(); // mô phỏng database bằng 1 HashMap
+    private final Map<String, Candidate> storage = new HashMap<>();
 
     @Override
     public void save(Candidate candidate) {
@@ -24,11 +24,11 @@ public class CandidateRepositoryImpl implements CandidateRepository {
 
     @Override
     public List<Candidate> findAll() {
-        return List.of();
+        return List.copyOf(storage.values());
     }
 
     @Override
-    public void deleteById(String s) {
-
+    public void deleteById(String id) {
+        storage.remove(id);
     }
 }
